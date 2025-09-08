@@ -1,0 +1,101 @@
+<div class="container">
+    <div class="form-container">
+        <div class="logo">
+            <img src="assets/images/logofet.png" alt="FET Logo">
+        </div>
+        
+        <form (ngSubmit)="login()">
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" id="email" name="email" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="password">Contraseña</label>
+                <input type="password" id="password" name="password" [(ngModel)]="password" required>
+            </div>
+            
+            <div class="forgot-password">
+                <a href="#" id="forgot-password-link" class="forgot-password-link">¿Olvidaste tu contraseña?</a>
+            </div>
+
+            <div class="forgot-password">
+                <a routerLink="/registro" class="forgot-password-link">Registrarse</a>
+            </div>
+            
+            <button type="submit" class="register-btn">Iniciar Sesión</button>
+        </form>
+    </div>
+    
+    <div class="promo-image">
+        <img src="assets/images/image.png" alt="Somos Generación FET">
+    </div>
+</div>
+
+<!-- Modal de recuperación de contraseña -->
+<div id="modal-recuperar" class="modal">
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <div class="logo">
+            <img src="assets/images/logofet.png" alt="FET Logo">
+        </div>
+        
+        <!-- Paso 1: Verificación de identidad -->
+        <div id="paso-verificacion">
+            <h2>Recuperar Contraseña</h2>
+            <p>Por favor, completa los siguientes campos para verificar tu identidad:</p>
+            
+            <form id="form-verificacion">
+                <div class="form-group">
+                    <label for="email-recuperar">Email</label>
+                    <input type="email" id="email-recuperar" name="email" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="documento">Número de Documento</label>
+                    <input type="text" id="documento" name="documento" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="codigo-estudiante">Código de Estudiante</label>
+                    <input type="text" id="codigo-estudiante" name="codigo_estudiante" required>
+                </div>
+                
+                <div id="mensaje-verificacion" class="mensaje"></div>
+                
+                <button type="submit" class="register-btn">Verificar</button>
+            </form>
+        </div>
+        
+        <!-- Paso 2: Cambio de contraseña -->
+        <div id="paso-cambio-password" style="display: none;">
+            <h2>Establecer Nueva Contraseña</h2>
+            <p>Ingresa tu nueva contraseña:</p>
+            
+            <form id="form-cambio-password">
+                <input type="hidden" id="usuario-id" name="usuario_id">
+                
+                <div class="form-group">
+                    <label for="nueva-password">Nueva Contraseña</label>
+                    <input type="password" id="nueva-password" name="password" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="confirmar-password">Confirmar Contraseña</label>
+                    <input type="password" id="confirmar-password" name="confirm_password" required>
+                </div>
+                
+                <div id="mensaje-cambio-password" class="mensaje"></div>
+                
+                <button type="submit" class="register-btn">Cambiar Contraseña</button>
+            </form>
+        </div>
+        
+        <!-- Paso 3: Confirmación -->
+        <div id="paso-confirmacion" style="display: none;">
+            <h2>¡Contraseña Actualizada!</h2>
+            <p>Tu contraseña ha sido actualizada correctamente.</p>
+            <button id="btn-volver-login" class="register-btn">Volver al Login</button>
+        </div>
+    </div>
+</div>
