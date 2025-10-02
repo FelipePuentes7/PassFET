@@ -1,0 +1,102 @@
+
+<div class="wrapper">
+    <nav class="sidebar">
+        <div class="sidebar-header">
+            <img src="/assets/images/logofet.png" alt="FET Logo" style="width: 100px;">
+        </div>
+
+        <div class="user-info">
+            <div class="user-avatar">
+                <i class="fas fa-user-graduate"></i>
+            </div>
+            <div class="user-details">
+                <p class="user-name">Nombre Estudiante</p>
+                <p class="user-role">Estudiante</p>
+            </div>
+        </div>
+
+        <ul class="sidebar-nav">
+            <li class="nav-item active" data-section="resumen">
+                <i class="fas fa-file-alt"></i>
+                <span>Resumen</span>
+            </li>
+            <li class="nav-item" data-section="progreso">
+                <i class="fas fa-chart-line"></i>
+                <span>Progreso</span>
+            </li>
+            <li class="nav-item" data-section="subir-avance">
+                <i class="fas fa-upload"></i>
+                <span>Subir Avance</span>
+            </li>
+            <li class="nav-item" data-section="historial">
+                <i class="fas fa-history"></i>
+                <span>Historial</span>
+            </li>
+            <li class="nav-item" data-section="chat">
+                <i class="fas fa-comments"></i>
+                <span>Chat con Tutor</span>
+                <span class="badge" id="chat-badge">0</span>
+            </li>
+            <li class="nav-item" data-section="nota-final">
+                <i class="fas fa-award"></i>
+                <span>Nota Final</span>
+            </li>
+        </ul>
+
+        <div class="sidebar-footer">
+            <a routerLink="/" class="logout-btn">
+                <i class="fas fa-sign-out-alt"></i>
+                <span>Cerrar Sesión</span>
+            </a>
+        </div>
+    </nav>
+
+    <div class="main-content">
+        <header class="top-header">
+            <div class="header-left">
+                <button id="toggle-sidebar" class="menu-toggle">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <h2>Sistema de Gestión de Pasantías</h2>
+            </div>
+            <div class="header-right">
+                <div class="notification-icon">
+                    <i class="fas fa-bell"></i>
+                    <span class="notification-badge">1</span>
+                </div>
+            </div>
+        </header>
+
+        <section id="resumen" class="content-section active">
+            <div class="section-header">
+                <h3><i class="fas fa-file-alt"></i> Resumen de la Pasantía</h3>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <h4>Detalles del Proyecto</h4>
+                </div>
+                <div class="card-body">
+                    <div class="info-grid">
+                        <div class="info-item">
+                            <span class="info-label">Título del Proyecto:</span>
+                            <span class="info-value">Desarrollo de Aplicación Web para Gestión</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">Empresa:</span>
+                            <span class="info-value">Tech Solutions S.A.S</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">Tutor Asignado:</span>
+                            <span class="info-value">Nombre del Tutor</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">Estado:</span>
+                            <span class="info-value estado estado-proceso">En Proceso</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+</div>

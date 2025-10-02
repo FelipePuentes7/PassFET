@@ -1,10 +1,6 @@
 <?php
 
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
 
-file_put_contents(__DIR__ . '/debug_log.txt', 'Request received at ' . date('Y-m-d H:i:s') . "\n", FILE_APPEND);
 
 
 use Illuminate\Foundation\Application;
