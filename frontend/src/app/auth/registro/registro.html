@@ -16,9 +16,9 @@
             </div>
             
             <div class="form-group">
-                <label for="nombre">Nombre completo:</label>
-                <input type="text" id="nombre" formControlName="nombre" required>
-                <div *ngIf="registerForm.get('nombre')?.invalid && registerForm.get('nombre')?.touched" class="error-text">
+                <label for="name">Nombre completo:</label>
+                <input type="text" id="name" formControlName="name" required>
+                <div *ngIf="registerForm.get('name')?.invalid && registerForm.get('name')?.touched" class="error-text">
                     El nombre es requerido.
                 </div>
             </div>

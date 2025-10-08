@@ -28,7 +28,7 @@ export class Registro implements OnInit {
 
   ngOnInit(): void {
     this.registerForm = this.fb.group({
-      nombre: ['', Validators.required],
+      name: ['', Validators.required],
       email: ['', [Validators.required, Validators.email, Validators.pattern(/@fet\.edu\.co$/)]],
       password: ['', [Validators.required, Validators.minLength(8)]],
       password_confirmation: ['', Validators.required],

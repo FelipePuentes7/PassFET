@@ -1,23 +1,32 @@
-import { Component, signal } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
-import { ApiService } from './services/api.service'; // 👈 importa tu servicio
+import { Component, Inject, Renderer2, OnInit } from '@angular/core';
+import { Router, NavigationEnd, RouterOutlet } from '@angular/router';
+import { DOCUMENT } from '@angular/common';
+import { filter } from 'rxjs/operators';
 
 @Component({
   selector: 'app-root',
   standalone: true,
   imports: [RouterOutlet],
   templateUrl: './app.html',
-  styleUrl: './app.css'
+  styleUrls: ['./app.css']
 })
-export class App {
-  protected readonly title = signal('frontend');
+export class App implements OnInit {
 
-  constructor(private api: ApiService) {}
+  constructor(
+    private router: Router,
+    private renderer: Renderer2,
+    @Inject(DOCUMENT) private document: Document
+  ) {}
 
-  checkConnection() {
-    this.api.testConnection().subscribe({
-      next: (res) => console.log('✅ Respuesta del backend:', res),
-      error: (err) => console.error('❌ Error al conectar:', err)
+  ngOnInit(): void {
+    this.router.events.pipe(
+      filter(event => event instanceof NavigationEnd)
+    ).subscribe(event => {
+      if ((event as NavigationEnd).urlAfterRedirects.startsWith('/admin')) {
+        this.renderer.addClass(this.document.body, 'admin-view-active');
+      } else {
+        this.renderer.removeClass(this.document.body, 'admin-view-active');
+      }
     });
   }
 }
