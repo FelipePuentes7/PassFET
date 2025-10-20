@@ -23,6 +23,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 // Routes for Pasantias Module
 Route::post('register', [RegisteredUserController::class, 'store']);
+Route::post('/login-directo', [RegisteredUserController::class, 'loginDirecto']);
 Route::apiResource('pasantias', PasantiaController::class);
 Route::get('estudiantes', [PasantiaController::class, 'getEstudiantes']);
 Route::get('tutores', [PasantiaController::class, 'getTutores']);

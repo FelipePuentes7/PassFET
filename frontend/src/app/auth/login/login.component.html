@@ -7,7 +7,7 @@
         <form (ngSubmit)="login()">
             <div class="form-group">
                 <label for="email">Email</label>
-                <input type="email" id="email" name="email" required>
+                <input type="email" id="email" name="email" [(ngModel)]="email" required>
             </div>
             
             <div class="form-group">
@@ -45,7 +45,7 @@
             <h2>Recuperar Contraseña</h2>
             <p>Por favor, completa los siguientes campos para verificar tu identidad:</p>
             
-            <form id="form-verificacion">
+            <form id="form-verificacion" (submit)="$event.preventDefault()">
                 <div class="form-group">
                     <label for="email-recuperar">Email</label>
                     <input type="email" id="email-recuperar" name="email" required>
@@ -72,7 +72,7 @@
             <h2>Establecer Nueva Contraseña</h2>
             <p>Ingresa tu nueva contraseña:</p>
             
-            <form id="form-cambio-password">
+            <form id="form-cambio-password" (submit)="$event.preventDefault()">
                 <input type="hidden" id="usuario-id" name="usuario_id">
                 
                 <div class="form-group">

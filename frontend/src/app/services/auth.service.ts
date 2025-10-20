@@ -16,11 +16,7 @@ export class AuthService {
   }
 
   login(email: string, password: string): Observable<any> {
-    return this.getCsrfToken().pipe(
-      switchMap(() => {
-        return this.http.post(`${this.backendUrl}/login`, { email, password }, { withCredentials: true });
-      })
-    );
+    return this.http.post(`${this.backendUrl}/api/login-directo`, { email, password });
   }
 
   register(userData: any): Observable<any> {
