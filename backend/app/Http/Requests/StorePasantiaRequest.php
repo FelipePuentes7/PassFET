@@ -34,7 +34,7 @@ class StorePasantiaRequest extends FormRequest
             'descripcion' => 'nullable|string',
             'fecha_inicio' => 'required|date',
             'fecha_fin' => 'required|date|after_or_equal:fecha_inicio',
-            'estado' => 'sometimes|in:planificada,en_proceso,finalizada,cancelada',
+            'estado' => 'sometimes|in:planificada,en_proceso,finalizada,cancelada,Pendiente',
         ];
     }
 }

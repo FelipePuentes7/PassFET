@@ -1,85 +1,168 @@
-import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { PasantiaService } from '../../../services/pasantia.service';
-import { User } from '../../../models/user.model';
-import { Pasantia } from '../../../models/pasantia.model';
+import { Component, type OnInit } from "@angular/core"
+import { CommonModule } from "@angular/common"
+import { ReactiveFormsModule, FormBuilder, type FormGroup, Validators } from "@angular/forms"
+import { RouterLink, RouterLinkActive, Router } from "@angular/router"
+import { PasantiaService } from "../../../services/pasantia.service"
+import type { User } from "../../../models/user.model"
+import type { Pasantia } from "../../../models/pasantia.model"
 
 @Component({
-  selector: 'app-pasantias-admin',
+  selector: "app-pasantias-admin",
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
-  templateUrl: './pasantias-admin.html',
-  styleUrls: ['./pasantias-admin.css']
+  imports: [CommonModule, ReactiveFormsModule, RouterLink, RouterLinkActive],
+  templateUrl: "./pasantias-admin.html",
+  styleUrls: ["./pasantias-admin.css"],
 })
 export class PasantiasAdminComponent implements OnInit {
+  // Sidebar state
+  isSidebarCollapsed = false
 
-  pasantiaForm: FormGroup;
-  estudiantes: User[] = [];
-  tutores: User[] = [];
-  pasantias: Pasantia[] = [];
-
-  successMessage: string | null = null;
-  errorMessage: string | null = null;
+  // Form and data
+  pasantiaForm!: FormGroup
+  pasantias: Pasantia[] = []
+  estudiantes: User[] = []
+  tutores: User[] = []
+  empresas: string[] = []
+  isEditing = false
+  editingId: number | null = null
+  successMessage: string = ""
+  errorMessage: string = ""
 
   constructor(
     private fb: FormBuilder,
-    private pasantiaService: PasantiaService
-  ) {
-    this.pasantiaForm = this.fb.group({
-      titulo: ['', Validators.required],
-      estudiante_id: ['', Validators.required],
-      tutor_id: [''],
-      nombre_empresa: ['', Validators.required],
-      supervisor_empresa: [''],
-      telefono_supervisor: [''],
-      fecha_inicio: ['', Validators.required],
-      fecha_fin: ['', Validators.required],
-      descripcion: ['']
-    });
-  }
+    private pasantiaService: PasantiaService,
+    private router: Router
+  ) {}
 
   ngOnInit(): void {
-    this.loadInitialData();
+    this.initForm()
+    this.loadData()
   }
 
-  loadInitialData(): void {
-    this.pasantiaService.getEstudiantes().subscribe(data => {
-      this.estudiantes = data;
-    });
-
-    this.pasantiaService.getTutores().subscribe(data => {
-      this.tutores = data;
-    });
-
-    this.loadPasantias();
+  toggleSidebar(): void {
+    this.isSidebarCollapsed = !this.isSidebarCollapsed
   }
 
-  loadPasantias(): void {
-    this.pasantiaService.getPasantias().subscribe(data => {
-      this.pasantias = data;
-    });
+  logout(): void {
+    // Implementa tu lógica de logout aquí
+    // Por ejemplo: limpiar localStorage, tokens, etc.
+    localStorage.removeItem('token')
+    localStorage.removeItem('user')
+    this.router.navigate(['/login'])
+  }
+
+  initForm(): void {
+    this.pasantiaForm = this.fb.group({
+      titulo: ["", Validators.required],
+      estudiante_id: ["", Validators.required],
+      tutor_id: [""],
+      nombre_empresa: ["", Validators.required],
+      supervisor_empresa: [""],
+      telefono_supervisor: [""],
+      fecha_inicio: ["", Validators.required],
+      fecha_fin: ["", Validators.required],
+      descripcion: [""],
+      estado: ["planificada", Validators.required],
+    })
+  }
+
+  loadData(): void {
+    this.pasantiaService.getPasantias().subscribe((data: Pasantia[]) => {
+      this.pasantias = data
+    })
+
+    this.pasantiaService.getEstudiantes().subscribe((data: User[]) => {
+      this.estudiantes = data
+    })
+
+    this.pasantiaService.getTutores().subscribe((data: User[]) => {
+      this.tutores = data
+    })
+
+    this.pasantiaService.getEmpresas().subscribe((data: string[]) => {
+      this.empresas = data
+    })
   }
 
   onSubmit(): void {
-    if (this.pasantiaForm.invalid) {
-      this.errorMessage = 'Por favor, complete todos los campos requeridos.';
-      return;
-    }
-
-    this.errorMessage = null;
-    this.successMessage = null;
-
-    this.pasantiaService.createPasantia(this.pasantiaForm.value).subscribe({
-      next: (response) => {
-        this.successMessage = response.message;
-        this.pasantiaForm.reset();
-        this.loadPasantias(); // Refresh the list
-      },
-      error: (error) => {
-        this.errorMessage = 'Ocurrió un error al crear la pasantía. Por favor, intente de nuevo.';
-        console.error(error);
+    if (this.pasantiaForm.valid) {
+      this.errorMessage = ""
+      this.successMessage = ""
+      if (this.isEditing && this.editingId !== null) {
+        this.pasantiaService
+          .updatePasantia(this.editingId, this.pasantiaForm.value)
+          .subscribe({
+            next: () => {
+              this.successMessage = "Pasantía actualizada exitosamente."
+              this.loadData()
+              this.resetForm()
+            },
+            error: (err) => {
+              this.errorMessage = "Error al actualizar la pasantía."
+              console.error(err)
+            }
+          })
+      } else {
+        this.pasantiaService.createPasantia(this.pasantiaForm.value).subscribe({
+            next: () => {
+              this.successMessage = "Pasantía creada exitosamente."
+              this.loadData()
+              this.resetForm()
+            },
+            error: (err) => {
+              this.errorMessage = "Error al crear la pasantía."
+              console.error(err)
+            }
+        })
       }
-    });
+    }
+  }
+
+  editPasantia(pasantia: Pasantia): void {
+    this.isEditing = true
+    this.editingId = pasantia.id
+    this.pasantiaForm.patchValue({
+      titulo: pasantia.titulo,
+      estudiante_id: pasantia.estudiante_id,
+      tutor_id: pasantia.tutor_id,
+      nombre_empresa: pasantia.nombre_empresa,
+      supervisor_empresa: pasantia.supervisor_empresa,
+      telefono_supervisor: pasantia.telefono_supervisor,
+      fecha_inicio: pasantia.fecha_inicio,
+      fecha_fin: pasantia.fecha_fin,
+      descripcion: pasantia.descripcion,
+      estado: pasantia.estado,
+    })
+  }
+
+  deletePasantia(id: number): void {
+    if (confirm("¿Está seguro de eliminar esta pasantía?")) {
+      this.pasantiaService.deletePasantia(id).subscribe({
+        next: () => {
+          this.successMessage = "Pasantía eliminada exitosamente."
+          this.loadData()
+        },
+        error: (err) => {
+          this.errorMessage = "Error al eliminar la pasantía."
+          console.error(err)
+        }
+      })
+    }
+  }
+
+  resetForm(): void {
+    this.pasantiaForm.reset({ estado: "Pendiente" })
+    this.isEditing = false
+    this.editingId = null
+  }
+
+  getEstudianteNombre(id: number): string {
+    const estudiante = this.estudiantes.find((e) => e.id === id)
+    return estudiante ? estudiante.name : "N/A"
+  }
+
+  getTutorNombre(id: number): string {
+    const tutor = this.tutores.find((t) => t.id === id)
+    return tutor ? tutor.name : "N/A"
   }
 }

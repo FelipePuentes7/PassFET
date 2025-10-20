@@ -1,12 +1,7 @@
-/* Styles for the content within the admin layout */
 :host {
   display: block;
-  max-width: 1400px;
-  margin: 0 auto;
-  padding: 0 2rem;
 }
 
-/* Enhanced page header with gradient and stats */
 .page-header {
   margin-bottom: 2.5rem;
 }
@@ -44,7 +39,6 @@
   margin: 0.5rem 0 0 0;
 }
 
-/* Added stats grid */
 .stats-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -115,7 +109,6 @@
   gap: 2.5rem;
 }
 
-/* Enhanced card styling with better shadows and borders */
 .card {
   background-color: #ffffff;
   border-radius: 1rem;
@@ -129,7 +122,6 @@
   box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
 }
 
-/* New card header design */
 .card-header {
   padding: 2rem 2.5rem;
   background: linear-gradient(135deg, #f9fafb 0%, #ffffff 100%);
@@ -155,7 +147,6 @@
   color: #039708;
 }
 
-/* Added search box styling */
 .table-actions {
   display: flex;
   gap: 1rem;
@@ -188,7 +179,6 @@
   box-shadow: 0 0 0 3px rgba(3, 151, 8, 0.1);
 }
 
-/* Form section with better padding */
 .form-section {
   padding: 0;
 }
@@ -207,7 +197,6 @@
   grid-column: 1 / -1;
 }
 
-/* Enhanced form field styling with icons */
 .form-field {
   display: flex;
   flex-direction: column;
@@ -260,7 +249,6 @@
   min-height: 100px;
 }
 
-/* Enhanced button styling */
 .form-actions {
   margin-top: 2rem;
   padding-top: 2rem;
@@ -299,7 +287,6 @@
   cursor: not-allowed;
 }
 
-/* Enhanced message styling */
 .message {
   margin-top: 1.5rem;
   padding: 1rem 1.25rem;
@@ -335,7 +322,6 @@
   border: 1px solid #fca5a5;
 }
 
-/* Enhanced table styling */
 .list-section {
   padding: 0;
 }
@@ -378,7 +364,6 @@ table tbody tr:last-child td {
   border-bottom: none;
 }
 
-/* Added student cell styling */
 .student-cell {
   display: flex;
   align-items: center;
@@ -398,7 +383,6 @@ table tbody tr:last-child td {
   font-size: 0.875rem;
 }
 
-/* Enhanced status badge */
 .status-badge {
   display: inline-flex;
   align-items: center;
@@ -434,7 +418,6 @@ table tbody tr:last-child td {
   color: #991b1b;
 }
 
-/* Added action buttons */
 .action-buttons {
   display: flex;
   gap: 0.5rem;
@@ -466,7 +449,6 @@ table tbody tr:last-child td {
   color: #dc2626;
 }
 
-/* Added empty state styling */
 .empty-row td {
   padding: 0 !important;
   border: none !important;
@@ -499,7 +481,6 @@ table tbody tr:last-child td {
   color: #9ca3af;
 }
 
-/* Responsive improvements */
 @media (max-width: 768px) {
   :host {
     padding: 0 1rem;
@@ -541,3 +522,214 @@ table tbody tr:last-child td {
     flex-direction: column;
   }
 }
+/* Estilos de navegación integrada */
+.admin-container {
+  position: relative;
+  overflow-x: hidden;
+  width: 100%;
+  min-height: 100vh;
+}
+
+.sidebar {
+  width: 280px;
+  height: 100vh;
+  position: fixed;
+  left: 0;
+  top: 0;
+  background: linear-gradient(180deg, #039708 0%, #027305 100%);
+  display: flex;
+  flex-direction: column;
+  z-index: 1000;
+  transform: translateX(-280px);
+  transition: transform 0.3s ease-in-out;
+  box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1);
+}
+
+.admin-container.sidebar-open .sidebar {
+  transform: translateX(0);
+}
+
+.sidebar-header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 2rem 1.5rem;
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(10px);
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.sidebar-header:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.logo {
+  height: 65px;
+  width: auto;
+  filter: none;
+  transition: transform 0.3s ease;
+}
+
+.sidebar-header:hover .logo {
+  transform: scale(1.08);
+}
+
+.sidebar-nav {
+  flex-grow: 1;
+  padding: 1.5rem 0;
+  overflow-y: auto;
+}
+
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem 1.5rem;
+  margin: 0.25rem 1rem;
+  color: #e2e8f0;
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 0.95rem;
+  border-radius: 0.75rem;
+  white-space: nowrap;
+  transition: all 0.2s ease;
+  border: none;
+  background: transparent;
+  width: calc(100% - 2rem);
+  cursor: pointer;
+}
+
+.nav-icon {
+  flex-shrink: 0;
+  opacity: 0.9;
+}
+
+.nav-item:hover {
+  background-color: rgba(255, 255, 255, 0.15);
+  color: #ffffff;
+  transform: translateX(4px);
+}
+
+.nav-item.active {
+  background-color: #ffffff;
+  color: #027305;
+  font-weight: 700;
+}
+
+.sidebar-footer {
+  padding: 1rem 0 1.5rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.logout-btn {
+  color: #fca5a5;
+}
+
+.logout-btn:hover {
+  background-color: rgba(239, 68, 68, 0.15);
+  color: #fee2e2;
+}
+
+.main-content-wrapper {
+  padding-left: 0;
+  width: 100%;
+  min-height: 100vh;
+  background-color: #f8fafc;
+  transition: padding-left 0.3s ease-in-out;
+}
+
+.admin-container.sidebar-open .main-content-wrapper {
+  padding-left: 280px;
+}
+
+.main-header {
+  min-height: 80px;
+  background-color: #ffffff;
+  border-bottom: 1px solid #e5e7eb;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 2.5rem;
+  box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.menu-toggle-btn {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  width: 28px;
+  height: 28px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  margin-right: 1.5rem;
+}
+
+.menu-toggle-btn span {
+  width: 100%;
+  height: 3px;
+  background-color: #334155;
+  border-radius: 3px;
+  transition: all 0.3s ease;
+}
+
+.header-content {
+  flex-grow: 1;
+}
+
+.header-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #1f2937;
+  margin: 0;
+}
+
+.header-subtitle {
+  font-size: 0.875rem;
+  color: #6b7280;
+  margin: 0.25rem 0 0 0;
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.user-info {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.5rem 1rem;
+  background-color: #f9fafb;
+  border-radius: 0.75rem;
+}
+
+.user-avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #04b50a, #039708);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+}
+
+.user-name {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #374151;
+}
+
+.content-area {
+  padding: 2.5rem;
+  min-height: calc(100vh - 80px);
+}
+
+/* ... resto de tus estilos existentes ... */

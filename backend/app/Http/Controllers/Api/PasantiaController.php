@@ -7,6 +7,7 @@ use App\Http\Requests\StorePasantiaRequest;
 use App\Models\Pasantia;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class PasantiaController extends Controller
 {
@@ -66,6 +67,19 @@ class PasantiaController extends Controller
         return response()->json([
             'message' => 'Pasantía eliminada exitosamente.'
         ], 200);
+    }
+
+    /**
+     * Get pasantias assigned to the authenticated tutor.
+     */
+    public function getTutorPasantias()
+    {
+        $tutorId = Auth::id();
+        $pasantias = Pasantia::with('estudiante')
+                                ->where('tutor_id', $tutorId)
+                                ->latest()
+                                ->get();
+        return response()->json($pasantias);
     }
 
     // Helper methods to get lists of students and tutors

@@ -1,21 +1,11 @@
-import { Component } from '@angular/core';
-import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
+import { Component } from "@angular/core"
+import { RouterOutlet } from "@angular/router"
 
 @Component({
-  selector: 'app-admin-layout',
+  selector: "app-admin-layout",
   standalone: true,
-  imports: [
-    RouterOutlet,
-    RouterLink,
-    RouterLinkActive
-  ],
-  templateUrl: './admin-layout.html',
-  styleUrls: ['./admin-layout.css']
+  imports: [RouterOutlet],
+  template: '<router-outlet />',
+  styles: []
 })
-export class AdminLayoutComponent {
-  isSidebarCollapsed = false;
-
-  toggleSidebar(): void {
-    this.isSidebarCollapsed = !this.isSidebarCollapsed;
-  }
-}
+export class AdminLayoutComponent {}

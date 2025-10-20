@@ -1,21 +1,33 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, switchMap } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
 
-  private baseUrl = 'http://localhost:8000/api'; // URL de tu backend de Laravel
+  private backendUrl = 'http://localhost:8000'; // URL de tu backend de Laravel
 
   constructor(private http: HttpClient) { }
 
+  private getCsrfToken(): Observable<any> {
+    return this.http.get(`${this.backendUrl}/sanctum/csrf-cookie`, { withCredentials: true });
+  }
+
   login(email: string, password: string): Observable<any> {
-    return this.http.post(`${this.baseUrl}/login`, { email, password });
+    return this.getCsrfToken().pipe(
+      switchMap(() => {
+        return this.http.post(`${this.backendUrl}/login`, { email, password }, { withCredentials: true });
+      })
+    );
   }
 
   register(userData: any): Observable<any> {
-    return this.http.post(`${this.baseUrl}/register`, userData);
+    return this.http.post(`${this.backendUrl}/api/register`, userData);
+  }
+
+  logout(): Observable<any> {
+    return this.http.post(`${this.backendUrl}/logout`, {}, { withCredentials: true });
   }
 }

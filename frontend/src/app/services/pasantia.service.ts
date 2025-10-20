@@ -29,4 +29,17 @@ export class PasantiaService {
     return this.http.get<User[]>(`${this.apiUrl}/tutores`);
   }
 
+  updatePasantia(id: number, pasantia: Partial<Pasantia>): Observable<any> {
+    return this.http.put(`${this.apiUrl}/pasantias/${id}`, pasantia);
+  }
+
+  deletePasantia(id: number): Observable<any> {
+    return this.http.delete(`${this.apiUrl}/pasantias/${id}`);
+  }
+
+  // NOTE: This endpoint does not exist on the backend. Returning empty array to fix UI error.
+  getEmpresas(): Observable<string[]> {
+    return new Observable(observer => observer.next([]));
+  }
+
 }

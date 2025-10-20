@@ -9,14 +9,12 @@
   --color-border: #e5e7eb;
   --font-family: "Roboto", "Open Sans", sans-serif;
   --transition-speed: 0.3s;
-  /* Added new design tokens for enhanced visuals */
   --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
   --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
   --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
   --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
 }
 
-/* Main container to prevent overflow issues from the transform */
 .admin-layout-container {
   position: relative;
   overflow-x: hidden;
@@ -24,56 +22,51 @@
   min-height: 100vh;
 }
 
-/* === Sidebar Styles === */
+/* Sidebar Styles */
 .sidebar {
   width: var(--sidebar-width);
   height: 100vh;
   position: fixed;
   left: 0;
   top: 0;
-  /* Added gradient background for more visual interest */
   background: linear-gradient(180deg, var(--color-primary) 0%, var(--color-primary-dark) 100%);
   display: flex;
   flex-direction: column;
   z-index: 1000;
-  transform: translateX(0);
+  transform: translateX(calc(-1 * var(--sidebar-width)));
   transition: transform var(--transition-speed) ease-in-out;
-  /* Added subtle shadow for depth */
   box-shadow: var(--shadow-xl);
+}
+
+.admin-layout-container.sidebar-open .sidebar {
+  transform: translateX(0);
 }
 
 .sidebar-header {
   display: flex;
-  flex-direction: column;
   justify-content: center;
   align-items: center;
   padding: 2rem 1.5rem;
-  /* Removed border, added subtle backdrop */
   background: rgba(255, 255, 255, 0.05);
   backdrop-filter: blur(10px);
   cursor: pointer;
-  gap: 0.75rem;
+  transition: background-color 0.2s ease;
+}
+
+.sidebar-header:hover {
+  background: rgba(255, 255, 255, 0.1);
 }
 
 .logo {
   height: 65px;
   width: auto;
+  filter: none;
+  image-rendering: crisp-edges;
   transition: transform 0.3s ease;
-  /* Added drop shadow for logo */
-  filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.2));
 }
 
 .sidebar-header:hover .logo {
   transform: scale(1.08);
-}
-
-/* Added institution name styling */
-.institution-name {
-  color: var(--color-white);
-  font-size: 1.25rem;
-  font-weight: 700;
-  letter-spacing: 0.5px;
-  text-transform: uppercase;
 }
 
 .sidebar-nav {
@@ -82,7 +75,6 @@
   overflow-y: auto;
 }
 
-/* Enhanced nav item styling with better spacing and hover effects */
 .nav-item {
   display: flex;
   align-items: center;
@@ -100,7 +92,6 @@
   overflow: hidden;
 }
 
-/* Added icon styling */
 .nav-icon {
   flex-shrink: 0;
   opacity: 0.9;
@@ -117,7 +108,6 @@
   opacity: 1;
 }
 
-/* Enhanced active state with accent border */
 .nav-item.active {
   background-color: var(--color-white);
   color: var(--color-primary-dark);
@@ -129,7 +119,6 @@
   opacity: 1;
 }
 
-/* Added accent line for active state */
 .nav-item.active::before {
   content: "";
   position: absolute;
@@ -147,7 +136,6 @@
   border-top: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-/* Special styling for logout button */
 .logout-btn {
   color: #fca5a5;
 }
@@ -157,16 +145,19 @@
   color: #fee2e2;
 }
 
-/* === Main Content Styles === */
+/* Main Content Styles */
 .main-content-wrapper {
-  padding-left: var(--sidebar-width);
+  padding-left: 0;
   width: 100%;
   min-height: 100vh;
   background-color: var(--color-content-bg);
   transition: padding-left var(--transition-speed) ease-in-out;
 }
 
-/* Enhanced header with better layout and styling */
+.admin-layout-container.sidebar-open .main-content-wrapper {
+  padding-left: var(--sidebar-width);
+}
+
 .main-header {
   min-height: 80px;
   background-color: var(--color-white);
@@ -193,14 +184,12 @@
   line-height: 1.2;
 }
 
-/* Added subtitle styling */
 .header-subtitle {
   font-size: 0.875rem;
   color: #6b7280;
   margin: 0.25rem 0 0 0;
 }
 
-/* Added user info section */
 .header-actions {
   display: flex;
   align-items: center;
@@ -242,22 +231,12 @@
 
 .content-area {
   padding: 2.5rem;
-  /* Added min-height for better layout */
   min-height: calc(100vh - 80px);
 }
 
-/* === Collapsed State === */
-.sidebar-collapsed .sidebar {
-  transform: translateX(calc(-1 * var(--sidebar-width)));
-}
-
-.sidebar-collapsed .main-content-wrapper {
-  padding-left: 0;
-}
-
-/* === Mobile Menu Toggle Button === */
+/* Mobile Menu Toggle Button */
 .menu-toggle-btn {
-  display: none;
+  display: flex;
   flex-direction: column;
   justify-content: space-around;
   width: 28px;
@@ -282,25 +261,8 @@
   transition: all 0.3s ease;
 }
 
-/* === Responsive Design === */
+/* Responsive Design */
 @media (max-width: 992px) {
-  .main-content-wrapper {
-    padding-left: 0;
-  }
-
-  .sidebar {
-    transform: translateX(calc(-1 * var(--sidebar-width)));
-  }
-
-  .menu-toggle-btn {
-    display: flex;
-  }
-
-  .admin-layout-container:not(.sidebar-collapsed) .sidebar {
-    transform: translateX(0);
-  }
-
-  /* Hide user name on mobile */
   .user-name {
     display: none;
   }
@@ -321,5 +283,13 @@
 
   .main-header {
     padding: 0 1.5rem;
+  }
+
+  .admin-layout-container.sidebar-open .main-content-wrapper {
+    padding-left: 0;
+  }
+
+  .admin-layout-container.sidebar-open .sidebar {
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
   }
 }

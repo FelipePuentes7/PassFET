@@ -3,6 +3,7 @@ import { LoginComponent } from './auth/login/login.component';
 import { Registro } from './auth/registro/registro';
 import { PasantiasAdminComponent } from './components/admin/pasantias-admin/pasantias-admin';
 import { AdminLayoutComponent } from './layouts/admin-layout';
+import { VistaTutorComponent } from './components/tutor/vista-tutor/vista-tutor';
 
 export const routes: Routes = [
   // Public routes (no layout)
@@ -15,6 +16,7 @@ export const routes: Routes = [
     component: AdminLayoutComponent,
     children: [
       { path: 'pasantias', component: PasantiasAdminComponent },
+      { path: 'tutor', component: VistaTutorComponent },
       // Future admin routes can be added here
       { path: '', redirectTo: 'pasantias', pathMatch: 'full' } // Default admin route
     ]
