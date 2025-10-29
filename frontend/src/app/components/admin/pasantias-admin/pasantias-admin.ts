@@ -43,14 +43,6 @@ export class PasantiasAdminComponent implements OnInit {
     this.isSidebarCollapsed = !this.isSidebarCollapsed
   }
 
-  logout(): void {
-    // Implementa tu lógica de logout aquí
-    // Por ejemplo: limpiar localStorage, tokens, etc.
-    localStorage.removeItem('token')
-    localStorage.removeItem('user')
-    this.router.navigate(['/login'])
-  }
-
   initForm(): void {
     this.pasantiaForm = this.fb.group({
       titulo: ["", Validators.required],

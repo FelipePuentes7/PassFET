@@ -2,28 +2,17 @@ import { Routes } from '@angular/router';
 import { LoginComponent } from './auth/login/login.component';
 import { Registro } from './auth/registro/registro';
 import { PasantiasAdminComponent } from './components/admin/pasantias-admin/pasantias-admin';
-import { AdminLayoutComponent } from './layouts/admin-layout';
 import { VistaTutorComponent } from './components/tutor/vista-tutor/vista-tutor';
+import { StudentViewComponent } from './components/student-view/student-view.component';
 
 export const routes: Routes = [
-  // Public routes (no layout)
   { path: 'login', component: LoginComponent },
   { path: 'registro', component: Registro },
-
-  // Admin routes (wrapped in AdminLayoutComponent)
-  {
-    path: 'admin',
-    component: AdminLayoutComponent,
-    children: [
-      { path: 'pasantias', component: PasantiasAdminComponent },
-      { path: 'tutor', component: VistaTutorComponent },
-      // Future admin routes can be added here
-      { path: '', redirectTo: 'pasantias', pathMatch: 'full' } // Default admin route
-    ]
-  },
+  { path: 'admin/pasantias', component: PasantiasAdminComponent },
+  { path: 'admin/tutor', component: VistaTutorComponent },
+  { path: 'student/dashboard', component: StudentViewComponent },
 
   // Redirect root to login
   { path: '', redirectTo: '/login', pathMatch: 'full' },
-  // Wildcard route for 404s can be added later
-  // { path: '**', component: NotFoundComponent },
+  { path: '**', redirectTo: '/login' } // Wildcard route for a 404-like behavior
 ];

@@ -15,9 +15,15 @@ class TareaController extends Controller
      */
     public function index(Pasantia $pasantia)
     {
-        // Logic to check if the authenticated tutor is assigned to this pasantia
-        // and return tasks
-        return response()->json([]);
+        // Authorize that the logged-in user is the tutor for this pasantia
+        if (Auth::id() !== $pasantia->tutor_id) {
+            return response()->json(['message' => 'No autorizado para ver estas tareas.'], 403);
+        }
+
+        // Eager load tasks with their corresponding submissions (entregas) and student info
+        $tareas = $pasantia->tareas()->with('entregas.estudiante')->get();
+        
+        return response()->json($tareas);
     }
 
     /**
@@ -25,8 +31,23 @@ class TareaController extends Controller
      */
     public function store(Request $request)
     {
-        // Logic to validate and create a new task
-        return response()->json(null, 201);
+        $validated = $request->validate([
+            'pasantia_id' => 'required|exists:pasantias,id',
+            'titulo' => 'required|string|max:255',
+            'descripcion' => 'required|string',
+            'fecha_entrega' => 'nullable|date',
+        ]);
+
+        $pasantia = Pasantia::findOrFail($validated['pasantia_id']);
+
+        // Authorize that the logged-in user is the tutor for this pasantia
+        if (Auth::id() !== $pasantia->tutor_id) {
+            return response()->json(['message' => 'No autorizado para crear tareas en esta pasantía.'], 403);
+        }
+
+        $tarea = Tarea::create($validated);
+
+        return response()->json($tarea, 201);
     }
 
     /**
@@ -34,8 +55,12 @@ class TareaController extends Controller
      */
     public function show(Tarea $tarea)
     {
-        // Logic to show a task and its related submissions
-        return response()->json([]);
+        // Authorize that the logged-in user is the tutor for the pasantia of this task
+        if (Auth::id() !== $tarea->pasantia->tutor_id) {
+            return response()->json(['message' => 'No autorizado.'], 403);
+        }
+        
+        return response()->json($tarea->load('entregas.estudiante'));
     }
 
     /**
@@ -43,8 +68,19 @@ class TareaController extends Controller
      */
     public function update(Request $request, Tarea $tarea)
     {
-        // Logic to validate and update a task
-        return response()->json(null, 200);
+        if (Auth::id() !== $tarea->pasantia->tutor_id) {
+            return response()->json(['message' => 'No autorizado.'], 403);
+        }
+
+        $validated = $request->validate([
+            'titulo' => 'sometimes|required|string|max:255',
+            'descripcion' => 'sometimes|required|string',
+            'fecha_entrega' => 'nullable|date',
+        ]);
+
+        $tarea->update($validated);
+
+        return response()->json($tarea, 200);
     }
 
     /**
@@ -52,7 +88,12 @@ class TareaController extends Controller
      */
     public function destroy(Tarea $tarea)
     {
-        // Logic to delete a task
+        if (Auth::id() !== $tarea->pasantia->tutor_id) {
+            return response()->json(['message' => 'No autorizado.'], 403);
+        }
+
+        $tarea->delete();
+
         return response()->json(null, 204);
     }
 
@@ -61,7 +102,24 @@ class TareaController extends Controller
      */
     public function calificarEntrega(Request $request, Entrega $entrega)
     {
-        // Logic to validate and save the grade and tutor's comment
-        return response()->json(null, 200);
+        // Authorization: Check if the logged-in user is the tutor of the pasantia
+        // related to this entrega.
+        $pasantia = $entrega->tarea->pasantia;
+        if (Auth::id() !== $pasantia->tutor_id) {
+            return response()->json(['message' => 'No autorizado para calificar esta entrega.'], 403);
+        }
+
+        $validated = $request->validate([
+            'calificacion' => 'required|numeric|min:0|max:100',
+            'comentario_tutor' => 'nullable|string',
+        ]);
+
+        $entrega->update([
+            'calificacion' => $validated['calificacion'],
+            'comentario_tutor' => $validated['comentario_tutor'],
+            'fecha_calificacion' => now(),
+        ]);
+
+        return response()->json($entrega->load('estudiante'), 200);
     }
 }

@@ -1,3 +1,7 @@
+.student-view-container {
+  padding: 2rem;
+}
+
 .status-badge {
     display: inline-block;
     padding: 0.25em 0.6em;

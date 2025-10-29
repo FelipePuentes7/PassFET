@@ -16,7 +16,11 @@ export class AuthService {
   }
 
   login(email: string, password: string): Observable<any> {
-    return this.http.post(`${this.backendUrl}/api/login-directo`, { email, password });
+    return this.getCsrfToken().pipe(
+      switchMap(() => {
+        return this.http.post(`${this.backendUrl}/api/login-directo`, { email, password }, { withCredentials: true });
+      })
+    );
   }
 
   register(userData: any): Observable<any> {
@@ -25,5 +29,9 @@ export class AuthService {
 
   logout(): Observable<any> {
     return this.http.post(`${this.backendUrl}/logout`, {}, { withCredentials: true });
+  }
+
+  isAuthenticated(): boolean {
+    return localStorage.getItem('isAuthenticated') === 'true';
   }
 }

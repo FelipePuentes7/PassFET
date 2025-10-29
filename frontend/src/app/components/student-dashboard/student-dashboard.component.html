@@ -1,0 +1,33 @@
+<div class="content-wrapper">
+  <h2>Bienvenido, {{ studentName }}</h2>
+
+  <div *ngIf="pasantia">
+    <h3>Mi Pasantía: {{ pasantia.titulo }}</h3>
+    <p>Tutor Asignado: {{ pasantia.tutor.name }}</p>
+
+    <h4>Tareas Asignadas</h4>
+    <ul>
+      <li *ngFor="let tarea of tareas">
+        <strong>{{ tarea.titulo }}</strong> (Vence: {{ tarea.fecha_entrega }})
+        <p>{{ tarea.descripcion }}</p>
+
+        <div *ngIf="!tarea.entrega">
+          <textarea [(ngModel)]="comentarioEstudiante" placeholder="Escribe una respuesta..."></textarea>
+          <input type="file" (change)="onFileSelected($event)">
+          <button (click)="submitTask(tarea.id)">Entregar Tarea</button>
+        </div>
+
+        <div *ngIf="tarea.entrega">
+          <p><strong>Estado:</strong> Entregado</p>
+          <p><strong>Calificación:</strong> {{ tarea.entrega.calificacion || 'Pendiente' }}</p>
+          <p><strong>Feedback:</strong> {{ tarea.entrega.comentario_tutor || 'N/A' }}</p>
+        </div>
+        <hr>
+      </li>
+    </ul>
+  </div>
+
+  <div *ngIf="!pasantia">
+    <p>No tienes una pasantía asignada.</p>
+  </div>
+</div>

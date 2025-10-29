@@ -41,8 +41,17 @@ class Pasantia extends Model
     /**
      * Get the tutor that supervises the internship.
      */
-    public function tutor(): BelongsTo
-    {
-        return $this->belongsTo(User::class, 'tutor_id');
+        public function tutor(): BelongsTo
+        {
+            return $this->belongsTo(User::class, 'tutor_id');
+        }
+    
+        /**
+         * Get the tareas for the pasantia.
+         */
+        public function tareas()
+        {
+            return $this->hasMany(Tarea::class);
+        }
     }
-}
+    

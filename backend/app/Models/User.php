@@ -55,4 +55,14 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+    public function pasantiasComoTutor()
+    {
+        return $this->hasMany(Pasantia::class, 'tutor_id');
+    }
+
+    public function pasantiaComoEstudiante()
+    {
+        return $this->hasOne(Pasantia::class, 'estudiante_id');
+    }
 }

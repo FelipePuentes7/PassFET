@@ -4,36 +4,58 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
-use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\Rules;
 
 class RegisteredUserController extends Controller
 {
     /**
      * Handle an incoming registration request.
-     *
-     * @throws \Illuminate\Validation\ValidationException
      */
-    public function store(Request $request): Response
+    public function store(Request $request)
     {
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
+            'rol' => ['required', 'string'],
+            'documento' => ['nullable', 'string'],
+            'telefono' => ['nullable', 'string'],
+            'ciclo' => ['nullable', 'string'],
+            'opcion_grado' => ['nullable', 'string'],
+            'nombre_proyecto' => ['nullable', 'string'],
+            'nombre_empresa' => ['nullable', 'string'],
+            'codigo_estudiante' => ['nullable', 'string'],
+            'codigo_institucional' => ['nullable', 'string'],
         ]);
 
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
+            'rol' => $request->rol,
+            'documento' => $request->documento,
+            'telefono' => $request->telefono,
+            'ciclo' => $request->ciclo,
+            'opcion_grado' => $request->opcion_grado,
+            'nombre_proyecto' => $request->nombre_proyecto,
+            'nombre_empresa' => $request->nombre_empresa,
+            'codigo_estudiante' => $request->codigo_estudiante,
+            'codigo_institucional' => $request->codigo_institucional,
         ]);
 
-        event(new Registered($user));
-
+        // Login the user after registration
         Auth::login($user);
 
-        return response()->noContent();
+        // Create a token for the user
+        $token = $user->createToken('auth_token')->plainTextToken;
+
+        return response()->json([
+            'user' => $user,
+            'access_token' => $token,
+        ]);
     }
 
     /**
@@ -46,11 +68,17 @@ class RegisteredUserController extends Controller
             'password' => ['required'],
         ]);
 
-        if (Auth::attempt($credentials)) {
-            $user = Auth::user();
-            return response()->json(['user' => $user]);
+        $user = User::where('email', $credentials['email'])->first();
+
+        if (!$user || !Hash::check($credentials['password'], $user->password)) {
+            return response()->json(['error' => 'Credenciales incorrectas'], 401);
         }
 
-        return response()->json(['error' => 'Credenciales incorrectas'], 401);
+        $token = $user->createToken('auth_token')->plainTextToken;
+
+        return response()->json([
+            'user' => $user,
+            'access_token' => $token,
+        ]);
     }
 }

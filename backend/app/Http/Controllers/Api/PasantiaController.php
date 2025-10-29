@@ -8,6 +8,7 @@ use App\Models\Pasantia;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 class PasantiaController extends Controller
 {
@@ -89,8 +90,9 @@ class PasantiaController extends Controller
      */
     public function getEstudiantes()
     {
-        // Assuming you have a 'rol' column in your users table
+        Log::info('getEstudiantes method called.');
         $estudiantes = User::where('rol', 'estudiante')->orderBy('name')->get();
+        Log::info('Estudiantes found: ' . $estudiantes->count());
         return response()->json($estudiantes);
     }
 
@@ -99,7 +101,9 @@ class PasantiaController extends Controller
      */
     public function getTutores()
     {
+        Log::info('getTutores method called.');
         $tutores = User::where('rol', 'tutor')->orderBy('name')->get();
+        Log::info('Tutores found: ' . $tutores->count());
         return response()->json($tutores);
     }
 }

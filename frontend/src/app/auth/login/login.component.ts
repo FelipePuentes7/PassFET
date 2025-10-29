@@ -50,7 +50,7 @@ export class LoginComponent {
         } else if (userRole === 'tutor') {
           this.router.navigate(['/admin/tutor']);
         } else if (userRole === 'estudiante') {
-          this.router.navigate(['/estudiante/dashboard']);
+          this.router.navigate(['/student/dashboard']);
         } else {
           this.error = 'Rol de usuario no reconocido.';
           console.warn('Rol no reconocido o sin redirección definida:', userRole);

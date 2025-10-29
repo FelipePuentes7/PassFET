@@ -14,19 +14,14 @@ class Tarea extends Model
         'titulo',
         'descripcion',
         'fecha_entrega',
+        'status',
     ];
 
-    /**
-     * Get the pasantia that owns the tarea.
-     */
     public function pasantia()
     {
         return $this->belongsTo(Pasantia::class);
     }
 
-    /**
-     * Get the entregas for the tarea.
-     */
     public function entregas()
     {
         return $this->hasMany(Entrega::class);

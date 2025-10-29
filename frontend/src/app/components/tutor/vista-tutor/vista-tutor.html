@@ -1,40 +1,104 @@
 <div class="tutor-dashboard-container">
-  <header class="page-header">
-    <h1>Mis Pasantías Asignadas</h1>
-    <p>Aquí puedes ver y gestionar las pasantías en las que estás asignado como tutor.</p>
-  </header>
+  
 
-  <div *ngIf="isLoading" class="loading-state">
-    <p>Cargando pasantías...</p>
-  </div>
 
-  <div *ngIf="error" class="error-state">
-    <p>{{ error }}</p>
-  </div>
+  <!-- Loading and Error States -->
+  <div *ngIf="isLoading" class="loading-state"><p>Cargando...</p></div>
+  <div *ngIf="error" class="error-state"><p>{{ error }}</p></div>
 
+  <!-- Main Content Area -->
   <div *ngIf="!isLoading && !error">
-    <div *ngIf="pasantias.length > 0; else noPasantias">
-      <div class="pasantias-grid">
-        <div *ngFor="let pasantia of pasantias" class="card">
-          <div class="card-header">
-            <h2>{{ pasantia.titulo }}</h2>
-          </div>
-          <div class="card-body">
-            <p><strong>Estudiante:</strong> {{ pasantia.estudiante?.name || 'No asignado' }}</p>
-            <p><strong>Empresa:</strong> {{ pasantia.nombre_empresa }}</p>
-            <p><strong>Estado:</strong> <span class="status-badge" [ngClass]="pasantia.estado">{{ pasantia.estado }}</span></p>
-          </div>
-          <div class="card-footer">
-            <button class="btn-primary">Ver Detalles y Tareas</button>
+
+    <!-- Pasantías View (if none is selected) -->
+    <div *ngIf="!selectedPasantia">
+      <header class="page-header">
+        <h2>Mis Pasantías Asignadas</h2>
+        <p>Selecciona una pasantía para ver sus detalles y gestionar las tareas.</p>
+      </header>
+      <div *ngIf="pasantias.length > 0; else noPasantias">
+        <div class="pasantias-grid">
+          <div *ngFor="let pasantia of pasantias" class="card" (click)="selectPasantia(pasantia)">
+            <div class="card-header"><h2>{{ pasantia.titulo }}</h2></div>
+            <div class="card-body">
+              <p><strong>Estudiante:</strong> {{ pasantia.estudiante?.name || 'No asignado' }}</p>
+              <p><strong>Empresa:</strong> {{ pasantia.nombre_empresa }}</p>
+            </div>
+            <div class="card-footer"><button class="btn-primary">Gestionar</button></div>
           </div>
         </div>
       </div>
+      <ng-template #noPasantias>
+        <div class="empty-state"><p>No tienes pasantías asignadas.</p></div>
+      </ng-template>
     </div>
 
-    <ng-template #noPasantias>
-      <div class="empty-state">
-        <p>No tienes pasantías asignadas en este momento.</p>
+    <!-- Detailed View (if a pasantia is selected) -->
+    <div *ngIf="selectedPasantia">
+      <button (click)="unselectPasantia()" class="btn-secondary">&larr; Volver a mis pasantías</button>
+      <header class="page-header">
+        <h2>Gestionando: {{ selectedPasantia.titulo }}</h2>
+        <p>Estudiante a cargo: {{ selectedPasantia.estudiante?.name }}</p>
+      </header>
+
+      <!-- 1. Add New Task Form -->
+      <div class="card">
+        <h3>Agregar Nueva Tarea</h3>
+        <form (ngSubmit)="onSubmitTarea()" class="form-columns">
+          <div class="form-group">
+            <label for="titulo">Título:</label>
+            <input type="text" id="titulo" [(ngModel)]="nuevaTarea.titulo" name="titulo" required>
+          </div>
+          <div class="form-group">
+            <label for="descripcion">Descripción:</label>
+            <textarea id="descripcion" [(ngModel)]="nuevaTarea.descripcion" name="descripcion" required></textarea>
+          </div>
+          <button type="submit" class="btn-primary">Agregar Tarea</button>
+        </form>
       </div>
-    </ng-template>
+
+      <!-- 2. List of Tasks and Submissions -->
+      <h3>Tareas y Entregas</h3>
+      <div *ngIf="tareas.length > 0; else noTareas">
+        <div *ngFor="let tarea of tareas" class="card task-card">
+          <h4>{{ tarea.titulo }}</h4>
+          <p>{{ tarea.descripcion }}</p>
+          <p><strong>Estado:</strong> <span class="status-badge status-{{tarea.status}}">{{ tarea.status }}</span></p>
+          
+          <div *ngIf="tarea.entregas.length > 0; else noEntregas" class="entregas-section">
+            <h5>Entregas de Estudiantes</h5>
+            <div *ngFor="let entrega of tarea.entregas" class="entrega-box">
+              <p><strong>Entrega de:</strong> {{ entrega.estudiante.name }}</p>
+              <p><strong>Comentario del estudiante:</strong> {{ entrega.comentario_estudiante || 'Ninguno' }}</p>
+              <p><em><a [href]="'http://localhost:8000/storage/' + entrega.archivo_path" target="_blank">Ver archivo entregado</a></em></p>
+              
+              <div *ngIf="tarea.status === 'por revisar'">
+                <form (ngSubmit)="onCalificar(entrega.id)" class="form-columns">
+                  <div class="form-group">
+                    <label for="calificacion-{{entrega.id}}">Calificación (0-5):</label>
+                    <input type="number" id="calificacion-{{entrega.id}}" name="calificacion-{{entrega.id}}" 
+                           [(ngModel)]="calificacionModel[entrega.id].calificacion" min="0" max="5">
+                  </div>
+                  <div class="form-group">
+                    <label for="comentario-{{entrega.id}}">Comentario para el estudiante:</label>
+                    <textarea id="comentario-{{entrega.id}}" name="comentario-{{entrega.id}}" 
+                              [(ngModel)]="calificacionModel[entrega.id].comentario_tutor"></textarea>
+                  </div>
+                  <button type="submit" class="btn-primary">Guardar Calificación</button>
+                </form>
+              </div>
+
+              <div *ngIf="tarea.status === 'entregado'">
+                <h5>Calificación</h5>
+                <p><strong>Nota:</strong> {{ entrega.calificacion }}</p>
+                <p><strong>Comentario:</strong> {{ entrega.comentario_tutor }}</p>
+              </div>
+
+            </div>
+          </div>
+          <ng-template #noEntregas><p><em>Aún no hay entregas para esta tarea.</em></p></ng-template>
+        </div>
+      </div>
+      <ng-template #noTareas><p>No hay tareas asignadas para esta pasantía.</p></ng-template>
+    </div>
   </div>
 </div>
