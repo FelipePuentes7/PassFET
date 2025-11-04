@@ -1,0 +1,29 @@
+<div>
+  <h2>Historial de Calificaciones</h2>
+
+  <div *ngIf="history$ | async as history; else loading">
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Tarea</th>
+          <th>Fecha de Entrega</th>
+          <th>Calificación</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let entrega of history">
+          <td>{{ entrega.tarea?.titulo }}</td>
+          <td>{{ entrega.fecha_entrega | date:'dd/MM/yyyy h:mm a' }}</td>
+          <td>{{ entrega.calificacion }}/10</td> <!-- Asumo una nota sobre 10 -->
+        </tr>
+        <tr *ngIf="history.length === 0">
+          <td colspan="3">Aún no tienes calificaciones para mostrar.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <ng-template #loading>
+    <p>Cargando historial...</p>
+  </ng-template>
+</div>

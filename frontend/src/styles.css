@@ -43,3 +43,25 @@ body {
     font-family: 'Roboto', sans-serif;
     color: #ffffff;
 }
+
+/* Insignias para estado de entrega */
+.badge {
+    display: inline-block;
+    padding: 0.25em 0.6em;
+    font-size: 75%;
+    font-weight: 700;
+    line-height: 1;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: baseline;
+    border-radius: 0.375rem;
+    color: #fff;
+}
+
+.badge-a-tiempo {
+    background-color: #28a745; /* Verde */
+}
+
+.badge-tardia {
+    background-color: #dc3545; /* Rojo */
+}

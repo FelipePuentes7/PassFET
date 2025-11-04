@@ -31,6 +31,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/student/pasantia', [StudentController::class, 'getPasantia']);
     Route::post('/tareas/{tarea}/submit', [StudentController::class, 'submitTask']);
     Route::get('/tareas/{tarea}/entrega', [StudentController::class, 'getEntregaForStudent']);
+    Route::get('/student/historial-calificaciones', [StudentController::class, 'getGradesHistory']);
 
     // Common Routes
     Route::get('/pasantias/{pasantia}/tareas', [TutorController::class, 'getTareas']);

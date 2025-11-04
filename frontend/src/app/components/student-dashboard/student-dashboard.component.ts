@@ -29,14 +29,14 @@ export class StudentDashboardComponent implements OnInit {
     this.isLoading = true;
     this.error = null;
     this.studentService.getStudentPasantia().subscribe({
-      next: data => {
+      next: (data: any) => {
         this.pasantia = data;
         if (this.pasantia) {
           this.loadTareas();
         }
         this.isLoading = false;
       },
-      error: err => {
+      error: (err: any) => {
         this.error = 'Error al cargar la información de la pasantía.';
         this.isLoading = false;
         console.error(err);
@@ -46,16 +46,16 @@ export class StudentDashboardComponent implements OnInit {
 
   loadTareas(): void {
     this.studentService.getPasantiaTareas(this.pasantia.id).subscribe({
-      next: data => {
+      next: (data: any) => {
         this.tareas = data;
         // For each task, load its specific submission
         this.tareas.forEach(tarea => {
-          this.studentService.getStudentEntrega(tarea.id).subscribe(entrega => {
+          this.studentService.getStudentEntrega(tarea.id).subscribe((entrega: any) => {
             tarea.entrega = entrega;
           });
         });
       },
-      error: err => {
+      error: (err: any) => {
         this.error = 'Error al cargar las tareas.';
         console.error(err);
       }
@@ -83,7 +83,7 @@ export class StudentDashboardComponent implements OnInit {
         this.comentarioEstudiante = '';
         this.selectedFile = null;
       },
-      error: err => {
+      error: (err: any) => {
         this.error = 'Error al entregar la tarea.';
         console.error(err);
       }

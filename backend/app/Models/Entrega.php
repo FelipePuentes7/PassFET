@@ -27,6 +27,16 @@ class Entrega extends Model
         'fecha_calificacion' => 'datetime',
     ];
 
+    protected $appends = ['is_late'];
+
+    public function getIsLateAttribute(): bool
+    {
+        if (empty($this->fecha_entrega) || empty($this->tarea->fecha_vencimiento)) {
+            return false;
+        }
+        return $this->fecha_entrega->isAfter($this->tarea->fecha_vencimiento);
+    }
+
     public function tarea()
     {
         return $this->belongsTo(Tarea::class);

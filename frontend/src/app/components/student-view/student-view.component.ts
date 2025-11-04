@@ -33,14 +33,14 @@ export class StudentViewComponent implements OnInit {
     // For now, as there is no login, we need a way to identify the student.
     // Let's assume the service can get the pasantia for a default student for now.
     this.studentService.getStudentPasantia().subscribe({
-      next: data => {
+      next: (data: any) => {
         this.pasantia = data;
         if (this.pasantia) {
           this.loadTareas();
         }
         this.isLoading = false;
       },
-      error: err => {
+      error: (err: any) => {
         this.error = 'Error al cargar la información de la pasantía.';
         this.isLoading = false;
         console.error(err);
@@ -50,15 +50,15 @@ export class StudentViewComponent implements OnInit {
 
   loadTareas(): void {
     this.studentService.getPasantiaTareas(this.pasantia!.id).subscribe({
-      next: data => {
+      next: (data: any) => {
         this.tareas = data;
         this.tareas.forEach(tarea => {
-          this.studentService.getStudentEntrega(tarea.id).subscribe(entrega => {
+          this.studentService.getStudentEntrega(tarea.id).subscribe((entrega: any) => {
             tarea.entrega = entrega;
           });
         });
       },
-      error: err => {
+      error: (err: any) => {
         this.error = 'Error al cargar las tareas.';
         console.error(err);
       }
@@ -86,7 +86,7 @@ export class StudentViewComponent implements OnInit {
         this.comentarioEstudiante = '';
         this.selectedFile = null;
       },
-      error: err => {
+      error: (err: any) => {
         this.error = 'Error al entregar la tarea.';
         console.error(err);
       }

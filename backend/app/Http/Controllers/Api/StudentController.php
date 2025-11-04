@@ -48,4 +48,19 @@ class StudentController extends Controller
 
         return response()->json($entrega);
     }
+
+    /**
+     * Obtiene el historial de calificaciones para el estudiante autenticado.
+     */
+    public function getGradesHistory(Request $request)
+    {
+        $student = $request->user();
+        $history = Entrega::with('tarea:id,titulo') // Carga solo id y titulo de la tarea
+            ->where('estudiante_id', $student->id)
+            ->whereNotNull('calificacion')
+            ->orderBy('fecha_entrega', 'desc')
+            ->get();
+
+        return response()->json($history);
+    }
 }

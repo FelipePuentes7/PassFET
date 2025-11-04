@@ -1,6 +1,4 @@
 <div class="tutor-dashboard-container">
-  
-
 
   <!-- Loading and Error States -->
   <div *ngIf="isLoading" class="loading-state"><p>Cargando...</p></div>
@@ -67,16 +65,23 @@
           <div *ngIf="tarea.entregas.length > 0; else noEntregas" class="entregas-section">
             <h5>Entregas de Estudiantes</h5>
             <div *ngFor="let entrega of tarea.entregas" class="entrega-box">
-              <p><strong>Entrega de:</strong> {{ entrega.estudiante.name }}</p>
+              <p><strong>Entrega de:</strong> {{ entrega.estudiante?.name }}</p>
+              <!-- CAMBIO: AÑADIR FECHA Y ESTADO DE ENTREGA -->
+              <p>
+                <strong>Entregado:</strong> {{ entrega.fecha_entrega | date:'dd/MM/yyyy h:mm a' }}
+                <span *ngIf="entrega.is_late" class="badge badge-tardia">Tardía</span>
+                <span *ngIf="!entrega.is_late" class="badge badge-a-tiempo">A tiempo</span>
+              </p>
               <p><strong>Comentario del estudiante:</strong> {{ entrega.comentario_estudiante || 'Ninguno' }}</p>
-              <p><em><a [href]="'http://localhost:8000/storage/' + entrega.archivo_path" target="_blank">Ver archivo entregado</a></em></p>
+              <p *ngIf="entrega.archivo_path"><em><a [href]="'http://localhost:8000/storage/' + entrega.archivo_path" target="_blank">Ver archivo entregado</a></em></p>
               
+              <!-- CORRECCIÓN: Usar onCalificar en lugar de gradeEntrega -->
               <div *ngIf="tarea.status === 'por revisar'">
                 <form (ngSubmit)="onCalificar(entrega.id)" class="form-columns">
                   <div class="form-group">
-                    <label for="calificacion-{{entrega.id}}">Calificación (0-5):</label>
+                    <label for="calificacion-{{entrega.id}}">Calificación (0-10):</label>
                     <input type="number" id="calificacion-{{entrega.id}}" name="calificacion-{{entrega.id}}" 
-                           [(ngModel)]="calificacionModel[entrega.id].calificacion" min="0" max="5">
+                           [(ngModel)]="calificacionModel[entrega.id].calificacion" min="0" max="10">
                   </div>
                   <div class="form-group">
                     <label for="comentario-{{entrega.id}}">Comentario para el estudiante:</label>

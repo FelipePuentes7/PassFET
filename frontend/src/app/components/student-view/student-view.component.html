@@ -1,6 +1,7 @@
 <div class="student-view-container">
   <header class="page-header">
     <h1>Vista del Estudiante</h1>
+    <a routerLink="/student/historial" class="btn-secondary">Ver Historial de Calificaciones</a>
   </header>
 
   <div *ngIf="isLoading" class="loading-state"><p>Cargando...</p></div>
@@ -39,6 +40,11 @@
         <div *ngIf="tarea.status === 'por revisar' || tarea.status === 'entregado'">
           <h5>Tu Entrega</h5>
           <div *ngIf="tarea.entrega">
+            <p>
+              <strong>Entregado:</strong> {{ tarea.entrega.fecha_entrega | date:'dd/MM/yyyy h:mm a' }}
+              <span *ngIf="tarea.entrega.is_late" class="badge badge-tardia">Tardía</span>
+              <span *ngIf="!tarea.entrega.is_late" class="badge badge-a-tiempo">A tiempo</span>
+            </p>
             <p><strong>Comentario:</strong> {{ tarea.entrega.comentario_estudiante || 'N/A' }}</p>
             <p *ngIf="tarea.entrega.archivo_path"><strong>Archivo:</strong> <a [href]="'http://localhost:8000/storage/' + tarea.entrega.archivo_path" target="_blank">Descargar</a></p>
             <hr>
