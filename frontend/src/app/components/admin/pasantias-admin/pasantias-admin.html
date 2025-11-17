@@ -1,4 +1,4 @@
-<div class="admin-pasantias-container"><div class="admin-container" [class.sidebar-open]="!isSidebarCollapsed">
+<div class="admin-container" [class.sidebar-open]="!isSidebarCollapsed">
   
   <aside class="sidebar">
     <div class="sidebar-header" (click)="toggleSidebar()">
@@ -46,7 +46,7 @@
     </div>
   </aside>
 
-
+  <!-- Movido todo el contenido dentro de main-content-wrapper -->
   <div class="main-content-wrapper">
     <header class="main-header">
       <button class="menu-toggle-btn" (click)="toggleSidebar()" title="Menú">
@@ -72,303 +72,306 @@
         </div>
       </div>
     </header>
-  </div>
-</div>
-  <header class="page-header">
-    <div class="header-content">
-      <div class="header-icon">
-        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect>
-          <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path>
-        </svg>
-      </div>
-      <div>
-        <h1>Gestión de Pasantías</h1>
-        <p>Cree y administre los registros de pasantías de los estudiantes.</p>
-      </div>
-    </div>
-    <div class="stats-grid">
-      <div class="stat-card">
-        <div class="stat-icon active">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
-          </svg>
-        </div>
-        <div class="stat-content">
-          <p class="stat-label">Activas</p>
-          <p class="stat-value">{{ pasantias.length }}</p>
-        </div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-icon pending">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <circle cx="12" cy="12" r="10"></circle>
-            <polyline points="12 6 12 12 16 14"></polyline>
-          </svg>
-        </div>
-        <div class="stat-content">
-          <p class="stat-label">Pendientes</p>
-          <p class="stat-value">0</p>
-        </div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-icon completed">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
-            <polyline points="22 4 12 14.01 9 11.01"></polyline>
-          </svg>
-        </div>
-        <div class="stat-content">
-          <p class="stat-label">Completadas</p>
-          <p class="stat-value">0</p>
-        </div>
-      </div>
-    </div>
-  </header>
 
-  <div class="content-wrapper">
-    <section class="form-section card">
-      <div class="card-header">
-        <h2>
-          <svg class="section-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M12 5v14M5 12h14"></path>
-          </svg>
-          Registrar Nueva Pasantía
-        </h2>
-      </div>
-      <form [formGroup]="pasantiaForm" (ngSubmit)="onSubmit()">
-        <div class="form-grid">
-          <div class="form-field full-span">
-            <label for="titulo">
-              <svg class="field-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
-                <polyline points="14 2 14 8 20 8"></polyline>
-              </svg>
-              Título de la Pasantía
-            </label>
-            <input id="titulo" type="text" formControlName="titulo" placeholder="Ej: Desarrollo de Aplicación Web para FET">
-          </div>
-
-          <div class="form-field">
-            <label for="estudiante_id">
-              <svg class="field-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-                <circle cx="12" cy="7" r="4"></circle>
-              </svg>
-              Estudiante
-            </label>
-            <select id="estudiante_id" formControlName="estudiante_id">
-              <option value="" disabled>Seleccione un estudiante</option>
-              <option *ngFor="let estudiante of estudiantes" [value]="estudiante.id">{{ estudiante.name }}</option>
-            </select>
-          </div>
-
-          <div class="form-field">
-            <label for="tutor_id">
-              <svg class="field-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
-                <circle cx="9" cy="7" r="4"></circle>
-                <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
-              </svg>
-              Tutor Asignado
-            </label>
-            <select id="tutor_id" formControlName="tutor_id">
-              <option value="">Seleccione un tutor (Opcional)</option>
-              <option *ngFor="let tutor of tutores" [value]="tutor.id">{{ tutor.name }}</option>
-            </select>
-          </div>
-
-          <div class="form-field">
-            <label for="nombre_empresa">
-              <svg class="field-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
-              </svg>
-              Nombre de la Empresa
-            </label>
-            <input id="nombre_empresa" type="text" formControlName="nombre_empresa" placeholder="Nombre de la compañía">
-          </div>
-
-          <div class="form-field">
-            <label for="supervisor_empresa">
-              <svg class="field-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
-                <circle cx="8.5" cy="7" r="4"></circle>
-                <polyline points="17 11 19 13 23 9"></polyline>
-              </svg>
-              Supervisor en la Empresa
-            </label>
-            <input id="supervisor_empresa" type="text" formControlName="supervisor_empresa" placeholder="Nombre del supervisor">
-          </div>
-
-          <div class="form-field">
-            <label for="telefono_supervisor">
-              <svg class="field-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
-              </svg>
-              Teléfono del Supervisor
-            </label>
-            <input id="telefono_supervisor" type="tel" formControlName="telefono_supervisor" placeholder="Número de contacto">
-          </div>
-
-          <div class="form-field">
-            <label for="fecha_inicio">
-              <svg class="field-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
-                <line x1="16" y1="2" x2="16" y2="6"></line>
-                <line x1="8" y1="2" x2="8" y2="6"></line>
-                <line x1="3" y1="10" x2="21" y2="10"></line>
-              </svg>
-              Fecha de Inicio
-            </label>
-            <input id="fecha_inicio" type="date" formControlName="fecha_inicio">
-          </div>
-
-          <div class="form-field">
-            <label for="fecha_fin">
-              <svg class="field-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
-                <line x1="16" y1="2" x2="16" y2="6"></line>
-                <line x1="8" y1="2" x2="8" y2="6"></line>
-                <line x1="3" y1="10" x2="21" y2="10"></line>
-                <path d="M8 14h.01M12 14h.01M16 14h.01M8 18h.01M12 18h.01M16 18h.01"></path>
-              </svg>
-              Fecha de Finalización
-            </label>
-            <input id="fecha_fin" type="date" formControlName="fecha_fin">
-          </div>
-
-          <div class="form-field full-span">
-            <label for="descripcion">
-              <svg class="field-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
-                <polyline points="14 2 14 8 20 8"></polyline>
-                <line x1="16" y1="13" x2="8" y2="13"></line>
-                <line x1="16" y1="17" x2="8" y2="17"></line>
-                <polyline points="10 9 9 9 8 9"></polyline>
-              </svg>
-              Descripción Breve
-            </label>
-            <textarea id="descripcion" formControlName="descripcion" rows="4" placeholder="Describa brevemente las funciones o el objetivo de la pasantía..."></textarea>
-          </div>
-        </div>
-
-        <div class="form-actions">
-          <button type="submit" class="btn-primary" [disabled]="pasantiaForm.invalid">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path>
-              <polyline points="17 21 17 13 7 13 7 21"></polyline>
-              <polyline points="7 3 7 8 15 8"></polyline>
+    <!-- Agregado content-area para contener todo el contenido principal -->
+    <div class="content-area">
+      <header class="page-header">
+        <div class="header-content">
+          <div class="header-icon">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect>
+              <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path>
             </svg>
-            Registrar Pasantía
-          </button>
-        </div>
-
-        <div *ngIf="successMessage" class="message success">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
-            <polyline points="22 4 12 14.01 9 11.01"></polyline>
-          </svg>
-          {{ successMessage }}
-        </div>
-        <div *ngIf="errorMessage" class="message error">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <circle cx="12" cy="12" r="10"></circle>
-            <line x1="15" y1="9" x2="9" y2="15"></line>
-            <line x1="9" y1="9" x2="15" y2="15"></line>
-          </svg>
-          {{ errorMessage }}
-        </div>
-      </form>
-    </section>
-
-    <section class="list-section card">
-      <div class="card-header">
-        <h2>
-          <svg class="section-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path>
-            <rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect>
-          </svg>
-          Pasantías Registradas
-        </h2>
-        <div class="table-actions">
-          <div class="search-box">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <circle cx="11" cy="11" r="8"></circle>
-              <path d="m21 21-4.35-4.35"></path>
-            </svg>
-            <input type="text" placeholder="Buscar pasantías...">
+          </div>
+          <div>
+            <h1>Gestión de Pasantías</h1>
+            <p>Cree y administre los registros de pasantías de los estudiantes.</p>
           </div>
         </div>
-      </div>
-      <div class="table-responsive">
-        <table>
-          <thead>
-            <tr>
-              <th>Estudiante</th>
-              <th>Título</th>
-              <th>Empresa</th>
-              <th>Tutor</th>
-              <th>Estado</th>
-              <th>Fecha Inicio</th>
-              <th>Acciones</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngIf="pasantias.length === 0" class="empty-row">
-              <td colspan="7">
-                <div class="empty-state">
-                  <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                    <circle cx="12" cy="12" r="10"></circle>
-                    <line x1="12" y1="8" x2="12" y2="12"></line>
-                    <line x1="12" y1="16" x2="12.01" y2="16"></line>
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-icon active">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
+              </svg>
+            </div>
+            <div class="stat-content">
+              <p class="stat-label">Activas</p>
+              <p class="stat-value">{{ pasantias.length }}</p>
+            </div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon pending">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="10"></circle>
+                <polyline points="12 6 12 12 16 14"></polyline>
+              </svg>
+            </div>
+            <div class="stat-content">
+              <p class="stat-label">Pendientes</p>
+              <p class="stat-value">0</p>
+            </div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon completed">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                <polyline points="22 4 12 14.01 9 11.01"></polyline>
+              </svg>
+            </div>
+            <div class="stat-content">
+              <p class="stat-label">Completadas</p>
+              <p class="stat-value">0</p>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <div class="content-wrapper">
+        <section class="form-section card">
+          <div class="card-header">
+            <h2>
+              <svg class="section-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M12 5v14M5 12h14"></path>
+              </svg>
+              Registrar Nueva Pasantía
+            </h2>
+          </div>
+          <form [formGroup]="pasantiaForm" (ngSubmit)="onSubmit()">
+            <div class="form-grid">
+              <div class="form-field full-span">
+                <label for="titulo">
+                  <svg class="field-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                    <polyline points="14 2 14 8 20 8"></polyline>
                   </svg>
-                  <p>No hay pasantías registradas.</p>
-                  <span>Comience registrando una nueva pasantía arriba.</span>
-                </div>
-              </td>
-            </tr>
-            <tr *ngFor="let pasantia of pasantias">
-              <td>
-                <div class="student-cell">
-                  <div class="student-avatar">{{ (pasantia.estudiante?.name || 'N')[0] }}</div>
-                  <span>{{ pasantia.estudiante?.name || 'N/A' }}</span>
-                </div>
-              </td>
-              <td><strong>{{ pasantia.titulo }}</strong></td>
-              <td>{{ pasantia.nombre_empresa }}</td>
-              <td>{{ pasantia.tutor?.name || 'No asignado' }}</td>
-              <td>
-                <span class="status-badge" [ngClass]="pasantia.estado">
-                  {{ pasantia.estado }}
-                </span>
-              </td>
-              <td>{{ pasantia.fecha_inicio | date:'dd/MM/yyyy' }}</td>
-              <td>
-                <div class="action-buttons">
-                  <button class="btn-icon" title="Ver detalles">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                      <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
-                      <circle cx="12" cy="12" r="3"></circle>
-                    </svg>
-                  </button>
-                  <button class="btn-icon" title="Editar">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                      <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
-                      <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
-                    </svg>
-                  </button>
-                  <button class="btn-icon danger" title="Eliminar">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                      <polyline points="3 6 5 6 21 6"></polyline>
-                      <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
-                    </svg>
-                  </button>
-                </div>
-              </td>
-            </tr>
-          </tbody>
-        </table>
+                  Título de la Pasantía
+                </label>
+                <input id="titulo" type="text" formControlName="titulo" placeholder="Ej: Desarrollo de Aplicación Web para FET">
+              </div>
+
+              <div class="form-field">
+                <label for="estudiante_id">
+                  <svg class="field-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                    <circle cx="12" cy="7" r="4"></circle>
+                  </svg>
+                  Estudiante
+                </label>
+                <select id="estudiante_id" formControlName="estudiante_id">
+                  <option value="" disabled>Seleccione un estudiante</option>
+                  <option *ngFor="let estudiante of estudiantes" [value]="estudiante.id">{{ estudiante.name }}</option>
+                </select>
+              </div>
+
+              <div class="form-field">
+                <label for="tutor_id">
+                  <svg class="field-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                    <circle cx="9" cy="7" r="4"></circle>
+                    <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                  </svg>
+                  Tutor Asignado
+                </label>
+                <select id="tutor_id" formControlName="tutor_id">
+                  <option value="">Seleccione un tutor (Opcional)</option>
+                  <option *ngFor="let tutor of tutores" [value]="tutor.id">{{ tutor.name }}</option>
+                </select>
+              </div>
+
+              <div class="form-field">
+                <label for="nombre_empresa">
+                  <svg class="field-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                  </svg>
+                  Nombre de la Empresa
+                </label>
+                <input id="nombre_empresa" type="text" formControlName="nombre_empresa" placeholder="Nombre de la compañía">
+              </div>
+
+              <div class="form-field">
+                <label for="supervisor_empresa">
+                  <svg class="field-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                    <circle cx="8.5" cy="7" r="4"></circle>
+                    <polyline points="17 11 19 13 23 9"></polyline>
+                  </svg>
+                  Supervisor en la Empresa
+                </label>
+                <input id="supervisor_empresa" type="text" formControlName="supervisor_empresa" placeholder="Nombre del supervisor">
+              </div>
+
+              <div class="form-field">
+                <label for="telefono_supervisor">
+                  <svg class="field-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+                  </svg>
+                  Teléfono del Supervisor
+                </label>
+                <input id="telefono_supervisor" type="tel" formControlName="telefono_supervisor" placeholder="Número de contacto">
+              </div>
+
+              <div class="form-field">
+                <label for="fecha_inicio">
+                  <svg class="field-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                    <line x1="16" y1="2" x2="16" y2="6"></line>
+                    <line x1="8" y1="2" x2="8" y2="6"></line>
+                    <line x1="3" y1="10" x2="21" y2="10"></line>
+                  </svg>
+                  Fecha de Inicio
+                </label>
+                <input id="fecha_inicio" type="date" formControlName="fecha_inicio">
+              </div>
+
+              <div class="form-field">
+                <label for="fecha_fin">
+                  <svg class="field-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                    <line x1="16" y1="2" x2="16" y2="6"></line>
+                    <line x1="8" y1="2" x2="8" y2="6"></line>
+                    <line x1="3" y1="10" x2="21" y2="10"></line>
+                    <path d="M8 14h.01M12 14h.01M16 14h.01M8 18h.01M12 18h.01M16 18h.01"></path>
+                  </svg>
+                  Fecha de Finalización
+                </label>
+                <input id="fecha_fin" type="date" formControlName="fecha_fin">
+              </div>
+
+              <div class="form-field full-span">
+                <label for="descripcion">
+                  <svg class="field-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                    <polyline points="14 2 14 8 20 8"></polyline>
+                    <line x1="16" y1="13" x2="8" y2="13"></line>
+                    <line x1="16" y1="17" x2="8" y2="17"></line>
+                    <polyline points="10 9 9 9 8 9"></polyline>
+                  </svg>
+                  Descripción Breve
+                </label>
+                <textarea id="descripcion" formControlName="descripcion" rows="4" placeholder="Describa brevemente las funciones o el objetivo de la pasantía..."></textarea>
+              </div>
+            </div>
+
+            <div class="form-actions">
+              <button type="submit" class="btn-primary" [disabled]="pasantiaForm.invalid">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path>
+                  <polyline points="17 21 17 13 7 13 7 21"></polyline>
+                  <polyline points="7 3 7 8 15 8"></polyline>
+                </svg>
+                Registrar Pasantía
+              </button>
+            </div>
+
+            <div *ngIf="successMessage" class="message success">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                <polyline points="22 4 12 14.01 9 11.01"></polyline>
+              </svg>
+              {{ successMessage }}
+            </div>
+            <div *ngIf="errorMessage" class="message error">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="10"></circle>
+                <line x1="15" y1="9" x2="9" y2="15"></line>
+                <line x1="9" y1="9" x2="15" y2="15"></line>
+              </svg>
+              {{ errorMessage }}
+            </div>
+          </form>
+        </section>
+
+        <section class="list-section card">
+          <div class="card-header">
+            <h2>
+              <svg class="section-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path>
+                <rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect>
+              </svg>
+              Pasantías Registradas
+            </h2>
+            <div class="table-actions">
+              <div class="search-box">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="11" cy="11" r="8"></circle>
+                  <path d="m21 21-4.35-4.35"></path>
+                </svg>
+                <input type="text" placeholder="Buscar pasantías...">
+              </div>
+            </div>
+          </div>
+          <div class="table-responsive">
+            <table>
+              <thead>
+                <tr>
+                  <th>Estudiante</th>
+                  <th>Título</th>
+                  <th>Empresa</th>
+                  <th>Tutor</th>
+                  <th>Estado</th>
+                  <th>Fecha Inicio</th>
+                  <th>Acciones</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngIf="pasantias.length === 0" class="empty-row">
+                  <td colspan="7">
+                    <div class="empty-state">
+                      <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <line x1="12" y1="8" x2="12" y2="12"></line>
+                        <line x1="12" y1="16" x2="12.01" y2="16"></line>
+                      </svg>
+                      <p>No hay pasantías registradas.</p>
+                      <span>Comience registrando una nueva pasantía arriba.</span>
+                    </div>
+                  </td>
+                </tr>
+                <tr *ngFor="let pasantia of pasantias">
+                  <td>
+                    <div class="student-cell">
+                      <div class="student-avatar">{{ (pasantia.estudiante?.name || 'N')[0] }}</div>
+                      <span>{{ pasantia.estudiante?.name || 'N/A' }}</span>
+                    </div>
+                  </td>
+                  <td><strong>{{ pasantia.titulo }}</strong></td>
+                  <td>{{ pasantia.nombre_empresa }}</td>
+                  <td>{{ pasantia.tutor?.name || 'No asignado' }}</td>
+                  <td>
+                    <span class="status-badge" [ngClass]="pasantia.estado">
+                      {{ pasantia.estado }}
+                    </span>
+                  </td>
+                  <td>{{ pasantia.fecha_inicio | date:'dd/MM/yyyy' }}</td>
+                  <td>
+                    <div class="action-buttons">
+                      <button class="btn-icon" title="Ver detalles">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                          <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                          <circle cx="12" cy="12" r="3"></circle>
+                        </svg>
+                      </button>
+                      <button class="btn-icon" title="Editar">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                          <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                          <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+                        </svg>
+                      </button>
+                      <button class="btn-icon danger" title="Eliminar">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                          <polyline points="3 6 5 6 21 6"></polyline>
+                          <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                        </svg>
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
       </div>
-    </section>
+    </div>
   </div>
 </div>

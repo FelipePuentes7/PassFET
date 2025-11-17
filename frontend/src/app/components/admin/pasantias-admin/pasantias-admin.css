@@ -522,6 +522,7 @@ table tbody tr:last-child td {
     flex-direction: column;
   }
 }
+
 /* Estilos de navegación integrada */
 .admin-container {
   position: relative;
@@ -634,7 +635,7 @@ table tbody tr:last-child td {
 .main-content-wrapper {
   padding-left: 0;
   width: 100%;
-  min-height: 100vh;
+  /* Removido min-height: 100vh que causaba el espacio en blanco */
   background-color: #f8fafc;
   transition: padding-left 0.3s ease-in-out;
 }
@@ -678,7 +679,8 @@ table tbody tr:last-child td {
   transition: all 0.3s ease;
 }
 
-.header-content {
+/* Removido .header-content duplicado que causaba conflicto */
+.main-header .header-content {
   flex-grow: 1;
 }
 
@@ -729,7 +731,6 @@ table tbody tr:last-child td {
 
 .content-area {
   padding: 2.5rem;
-  min-height: calc(100vh - 80px);
+  /* Cambiado min-height para que se ajuste al contenido real */
+  min-height: auto;
 }
-
-/* ... resto de tus estilos existentes ... */
