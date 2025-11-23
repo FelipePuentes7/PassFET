@@ -34,4 +34,20 @@ export class AuthService {
   isAuthenticated(): boolean {
     return localStorage.getItem('isAuthenticated') === 'true';
   }
+
+  verifyRecovery(data: any): Observable<any> {
+    return this.http.post(`${this.backendUrl}/api/verify-recovery`, data);
+  }
+
+  resetPassword(data: any): Observable<any> {
+    return this.http.post(`${this.backendUrl}/api/reset-password`, data);
+  }
+
+  getUsersByRole(role: string): Observable<any> {
+    return this.http.get(`${this.backendUrl}/api/users/role/${role}`);
+  }
+
+  getAllUsers(): Observable<any> {
+    return this.http.get(`${this.backendUrl}/api/users`);
+  }
 }

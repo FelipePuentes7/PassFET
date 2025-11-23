@@ -1,21 +1,35 @@
 import { Component, type OnInit } from "@angular/core"
 import { CommonModule } from "@angular/common"
 import { ReactiveFormsModule, FormBuilder, type FormGroup, Validators } from "@angular/forms"
-import { RouterLink, RouterLinkActive, Router } from "@angular/router"
+import { Router, RouterLink, RouterLinkActive } from "@angular/router" 
 import { PasantiaService } from "../../../services/pasantia.service"
 import type { User } from "../../../models/user.model"
 import type { Pasantia } from "../../../models/pasantia.model"
+import { StudentsComponent } from '../students/students.component';
+import { TutorsComponent } from '../tutors/tutors.component';
+import { ReportsComponent } from '../reports/reports.component';
+import { EditPasantiaModalComponent } from '../edit-pasantia-modal/edit-pasantia-modal.component';
 
 @Component({
   selector: "app-pasantias-admin",
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, RouterLink, RouterLinkActive],
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    RouterLink,
+    RouterLinkActive,
+    StudentsComponent,
+    TutorsComponent,
+    ReportsComponent,
+    EditPasantiaModalComponent,
+  ],
   templateUrl: "./pasantias-admin.html",
   styleUrls: ["./pasantias-admin.css"],
 })
 export class PasantiasAdminComponent implements OnInit {
-  // Sidebar state
-  isSidebarCollapsed = false
+  activeView: string = 'pasantias'; // Default view
+  isModalOpen = false;
+  selectedPasantia: Pasantia | null = null;
 
   // Form and data
   pasantiaForm!: FormGroup
@@ -39,8 +53,39 @@ export class PasantiasAdminComponent implements OnInit {
     this.loadData()
   }
 
-  toggleSidebar(): void {
-    this.isSidebarCollapsed = !this.isSidebarCollapsed
+  changeView(view: string): void {
+    this.activeView = view;
+  }
+
+  logout(): void {
+    localStorage.removeItem('token');
+    localStorage.removeItem('user');
+    localStorage.setItem('isAuthenticated', 'false');
+    this.router.navigate(['/login']);
+  }
+
+  openEditModal(pasantia: Pasantia): void {
+    this.selectedPasantia = pasantia;
+    this.isModalOpen = true;
+  }
+
+  closeModal(): void {
+    this.isModalOpen = false;
+    this.selectedPasantia = null;
+  }
+
+  savePasantia(pasantia: Pasantia): void {
+    this.pasantiaService.updatePasantia(pasantia.id, pasantia).subscribe({
+      next: () => {
+        this.successMessage = "Pasantía actualizada exitosamente.";
+        this.loadData();
+        this.closeModal();
+      },
+      error: (err) => {
+        this.errorMessage = "Error al actualizar la pasantía.";
+        console.error(err);
+      }
+    });
   }
 
   initForm(): void {

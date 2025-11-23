@@ -5,6 +5,7 @@ import { PasantiasAdminComponent } from './components/admin/pasantias-admin/pasa
 import { VistaTutorComponent } from './components/tutor/vista-tutor/vista-tutor';
 import { StudentViewComponent } from './components/student-view/student-view.component';
 import { GradesHistoryComponent } from './pages/student/grades-history/grades-history.component';
+import { RecoverPasswordComponent } from './auth/recover-password/recover-password.component';
 
 export const routes: Routes = [
   { path: 'login', component: LoginComponent },
@@ -13,6 +14,7 @@ export const routes: Routes = [
   { path: 'admin/tutor', component: VistaTutorComponent },
   { path: 'student/dashboard', component: StudentViewComponent },
   { path: 'student/historial', component: GradesHistoryComponent }, // Nueva ruta
+  { path: 'recover-password', component: RecoverPasswordComponent },
 
   // Redirect root to login
   { path: '', redirectTo: '/login', pathMatch: 'full' },

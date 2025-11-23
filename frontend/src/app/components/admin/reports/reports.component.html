@@ -1,0 +1,35 @@
+<div class="table-container">
+  <h2 class="table-title">Reportes de Pasantías</h2>
+  
+  <div *ngIf="isLoading" class="loading-spinner">Cargando...</div>
+  
+  <div *ngIf="error" class="error-message">{{ error }}</div>
+
+  <div *ngIf="!isLoading && !error" class="table-wrapper">
+    <table class="modern-table">
+      <thead>
+        <tr>
+          <th>Estudiante</th>
+          <th>Tutor</th>
+          <th>Nº Entregas</th>
+          <th>Estado de Tareas</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let report of reports">
+          <td>{{ report.student }}</td>
+          <td>{{ report.tutor }}</td>
+          <td>{{ report.submissions }}</td>
+          <td>
+            <span class="status" [ngClass]="{
+              'status-completed': report.task_status === 'Completado',
+              'status-in-progress': report.task_status === 'En Progreso'
+            }">
+              {{ report.task_status }}
+            </span>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules;
+use Illuminate\Validation\Rules\Password;
 
 class RegisteredUserController extends Controller
 {
@@ -79,6 +80,67 @@ class RegisteredUserController extends Controller
         return response()->json([
             'user' => $user,
             'access_token' => $token,
+        ]);
+    }
+
+    /**
+     * Verifica si los datos de recuperación coinciden con un usuario.
+     */
+    public function verifyRecovery(Request $request)
+    {
+        $request->validate([
+            'email' => 'required|email',
+            'cedula' => 'required|string',
+            'student_code' => 'required|string',
+        ]);
+
+        // Asumimos que las columnas se llaman 'cedula' y 'student_code'
+        $user = User::where('email', $request->email)
+                    ->where('cedula', $request->cedula)
+                    ->where('student_code', $request->student_code)
+                    ->first();
+
+        if ($user) {
+            return response()->json(['success' => true]);
+        }
+
+        return response()->json([
+            'success' => false,
+            'message' => 'Los datos no coinciden con nuestros registros.'
+        ], 404);
+    }
+
+    /**
+     * Actualiza la contraseña del usuario después de una verificación exitosa.
+     */
+    public function resetPassword(Request $request)
+    {
+        $request->validate([
+            'email' => 'required|email',
+            'cedula' => 'required|string',
+            'student_code' => 'required|string',
+            'password' => ['required', 'confirmed', Password::min(8)],
+        ]);
+
+        // Volvemos a verificar para seguridad
+        $user = User::where('email', $request->email)
+                    ->where('cedula', 'LIKE', $request->cedula)
+                    ->where('student_code', 'LIKE', $request->student_code)
+                    ->first();
+
+        if (!$user) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Los datos no coinciden con nuestros registros.'
+            ], 404);
+        }
+
+        $user->password = Hash::make($request->password);
+        $user->save();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Contraseña actualizada correctamente.'
         ]);
     }
 }

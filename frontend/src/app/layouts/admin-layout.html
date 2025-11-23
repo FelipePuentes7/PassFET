@@ -1,5 +1,5 @@
 <div class="admin-layout-container" [class.sidebar-open]="!isSidebarCollapsed">
-   Barra Lateral 
+  <!-- Barra Lateral -->
   <aside class="sidebar">
     <div class="sidebar-header" (click)="toggleSidebar()">
       <img src="assets/images/logofet.png" alt="Logo FET" class="logo">
@@ -54,7 +54,7 @@
     </div>
   </aside>
 
-   Contenido Principal 
+  <!-- Contenido Principal -->
   <div class="main-content-wrapper">
     <header class="main-header">
       <button class="menu-toggle-btn" (click)="toggleSidebar()" title="Menú">
@@ -82,7 +82,7 @@
     </header>
     
     <main class="content-area">
-      <router-outlet />
+      <router-outlet></router-outlet>
     </main>
   </div>
 </div>

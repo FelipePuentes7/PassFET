@@ -36,3 +36,7 @@ Route::middleware('auth:sanctum')->group(function () {
     // Common Routes
     Route::get('/pasantias/{pasantia}/tareas', [TutorController::class, 'getTareas']);
 });
+
+// Rutas para recuperación de contraseña
+Route::post('/verify-recovery', [App\Http\Controllers\Auth\RegisteredUserController::class, 'verifyRecovery']);
+Route::post('/reset-password', [App\Http\Controllers\Auth\RegisteredUserController::class, 'resetPassword']);

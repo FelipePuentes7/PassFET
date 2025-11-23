@@ -1,0 +1,67 @@
+<div class="modal-overlay" (click)="onClose()">
+  <div class="modal-container" (click)="$event.stopPropagation()">
+    <div class="modal-header">
+      <h2>Editar Pasantía</h2>
+      <button class="close-btn" (click)="onClose()">&times;</button>
+    </div>
+    <div class="modal-body">
+      <form [formGroup]="editForm" (ngSubmit)="onSave()">
+        <div class="form-grid">
+          <div class="form-field full-span">
+            <label for="edit-titulo">Título de la Pasantía</label>
+            <input id="edit-titulo" type="text" formControlName="titulo">
+          </div>
+          <div class="form-field">
+            <label for="edit-estudiante_id">Estudiante</label>
+            <select id="edit-estudiante_id" formControlName="estudiante_id">
+              <option *ngFor="let estudiante of estudiantes" [value]="estudiante.id">{{ estudiante.name }}</option>
+            </select>
+          </div>
+          <div class="form-field">
+            <label for="edit-tutor_id">Tutor Asignado</label>
+            <select id="edit-tutor_id" formControlName="tutor_id">
+              <option *ngFor="let tutor of tutores" [value]="tutor.id">{{ tutor.name }}</option>
+            </select>
+          </div>
+          <div class="form-field">
+            <label for="edit-nombre_empresa">Nombre de la Empresa</label>
+            <input id="edit-nombre_empresa" type="text" formControlName="nombre_empresa">
+          </div>
+          <div class="form-field">
+            <label for="edit-supervisor_empresa">Supervisor en la Empresa</label>
+            <input id="edit-supervisor_empresa" type="text" formControlName="supervisor_empresa">
+          </div>
+          <div class="form-field">
+            <label for="edit-telefono_supervisor">Teléfono del Supervisor</label>
+            <input id="edit-telefono_supervisor" type="tel" formControlName="telefono_supervisor">
+          </div>
+          <div class="form-field">
+            <label for="edit-fecha_inicio">Fecha de Inicio</label>
+            <input id="edit-fecha_inicio" type="date" formControlName="fecha_inicio">
+          </div>
+          <div class="form-field">
+            <label for="edit-fecha_fin">Fecha de Finalización</label>
+            <input id="edit-fecha_fin" type="date" formControlName="fecha_fin">
+          </div>
+          <div class="form-field full-span">
+            <label for="edit-descripcion">Descripción</label>
+            <textarea id="edit-descripcion" formControlName="descripcion" rows="4"></textarea>
+          </div>
+          <div class="form-field">
+            <label for="edit-estado">Estado</label>
+            <select id="edit-estado" formControlName="estado">
+              <option value="planificada">Planificada</option>
+              <option value="en-progreso">En Progreso</option>
+              <option value="completada">Completada</option>
+              <option value="cancelada">Cancelada</option>
+            </select>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn-secondary" (click)="onClose()">Cancelar</button>
+          <button type="submit" class="btn-primary" [disabled]="editForm.invalid">Guardar Cambios</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

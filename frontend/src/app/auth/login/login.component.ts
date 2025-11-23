@@ -3,12 +3,14 @@ import { FormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 
+import { CommonModule } from '@angular/common'; // Importación añadida
+
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css'],
   standalone: true,
-  imports: [FormsModule, RouterLink],
+  imports: [FormsModule, RouterLink, CommonModule],
 })
 export class LoginComponent {
   email = '';
@@ -60,12 +62,10 @@ export class LoginComponent {
         this.isLoading = false;
         console.error('Error en el login', err);
 
-        if (err.status === 419 || err.status === 401) {
-          this.error = 'Error de autenticación. Por favor, recargue la página e intente nuevamente.';
-        } else if (err.status === 422) {
-          this.error = 'Credenciales incorrectas. Por favor, verifique su email y contraseña.';
+        if (err.status === 401 || err.status === 422) {
+          this.error = 'Usuario o contraseña incorrectos.';
         } else {
-          this.error = 'Error al conectar con el servidor. Por favor, intente de nuevo.';
+          this.error = 'Error al conectar con el servidor. Intente de nuevo.';
         }
       },
     });
