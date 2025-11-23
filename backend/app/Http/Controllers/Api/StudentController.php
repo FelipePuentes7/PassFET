@@ -7,12 +7,17 @@ use Illuminate\Http\Request;
 use App\Models\Tarea;
 use App\Models\Entrega;
 
+use App\Models\User;
+
 class StudentController extends Controller
 {
-    // GET /api/student/pasantia
-    public function getPasantia(Request $request)
+    // GET /api/student/{id}/pasantia
+    public function getPasantia(Request $request, $id)
     {
-        $student = $request->user();
+        $student = User::find($id);
+        if (!$student) {
+            return response()->json(['message' => 'Estudiante no encontrado'], 404);
+        }
         $pasantia = $student->pasantiaComoEstudiante()->with('tutor')->first();
         return response()->json($pasantia);
     }
@@ -50,11 +55,14 @@ class StudentController extends Controller
     }
 
     /**
-     * Obtiene el historial de calificaciones para el estudiante autenticado.
+     * Obtiene el historial de calificaciones para el estudiante.
      */
-    public function getGradesHistory(Request $request)
+    public function getGradesHistory(Request $request, $id)
     {
-        $student = $request->user();
+        $student = User::find($id);
+        if (!$student) {
+            return response()->json(['message' => 'Estudiante no encontrado'], 404);
+        }
         $history = Entrega::with('tarea:id,titulo') // Carga solo id y titulo de la tarea
             ->where('estudiante_id', $student->id)
             ->whereNotNull('calificacion')

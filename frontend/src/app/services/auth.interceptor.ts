@@ -10,9 +10,10 @@ export const authInterceptor: HttpInterceptorFn = (
 ): Observable<HttpEvent<unknown>> => {
   
   const token = localStorage.getItem('token');
+  const apiUrl = 'http://localhost:8000/api';
 
-  // Comprueba si la petición es para nuestra API (URL relativa) y no una API externa.
-  const isApiUrl = !req.url.startsWith('http');
+  // Comprueba si la petición es para nuestra API.
+  const isApiUrl = req.url.startsWith(apiUrl);
 
   // Si no hay token o no es una URL de la API, la petición continúa sin modificarse.
   if (!token || !isApiUrl) {
@@ -22,8 +23,10 @@ export const authInterceptor: HttpInterceptorFn = (
   // Si hay un token y es una URL de la API, clona la petición para añadir la cabecera 'Authorization'.
   const clonedReq = req.clone({
     headers: req.headers.set('Authorization', `Bearer ${token}`),
+    withCredentials: true // Ensure cookies are sent
   });
 
   // Envía la petición clonada con la cabecera de autorización.
   return next(clonedReq);
 };
+

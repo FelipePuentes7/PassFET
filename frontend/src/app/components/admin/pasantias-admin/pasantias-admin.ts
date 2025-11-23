@@ -1,7 +1,7 @@
 import { Component, type OnInit } from "@angular/core"
 import { CommonModule } from "@angular/common"
 import { ReactiveFormsModule, FormBuilder, type FormGroup, Validators } from "@angular/forms"
-import { Router, RouterLink, RouterLinkActive } from "@angular/router" 
+import { Router } from "@angular/router" 
 import { PasantiaService } from "../../../services/pasantia.service"
 import type { User } from "../../../models/user.model"
 import type { Pasantia } from "../../../models/pasantia.model"
@@ -16,8 +16,6 @@ import { EditPasantiaModalComponent } from '../edit-pasantia-modal/edit-pasantia
   imports: [
     CommonModule,
     ReactiveFormsModule,
-    RouterLink,
-    RouterLinkActive,
     StudentsComponent,
     TutorsComponent,
     ReportsComponent,

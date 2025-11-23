@@ -28,10 +28,10 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/entregas/{entrega}/calificar', [TutorController::class, 'gradeEntrega']);
 
     // Student Routes
-    Route::get('/student/pasantia', [StudentController::class, 'getPasantia']);
+    Route::get('/student/{id}/pasantia', [StudentController::class, 'getPasantia']);
     Route::post('/tareas/{tarea}/submit', [StudentController::class, 'submitTask']);
     Route::get('/tareas/{tarea}/entrega', [StudentController::class, 'getEntregaForStudent']);
-    Route::get('/student/historial-calificaciones', [StudentController::class, 'getGradesHistory']);
+    Route::get('/student/{id}/historial-calificaciones', [StudentController::class, 'getGradesHistory']);
 
     // Common Routes
     Route::get('/pasantias/{pasantia}/tareas', [TutorController::class, 'getTareas']);

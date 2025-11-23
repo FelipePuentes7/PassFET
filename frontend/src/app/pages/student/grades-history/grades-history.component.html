@@ -1,29 +1,68 @@
-<div>
-  <h2>Historial de Calificaciones</h2>
+<div class="grades-history-container">
+  <header class="page-header">
+    <h1>Historial de Entregas y Calificaciones</h1>
+  </header>
 
-  <div *ngIf="history$ | async as history; else loading">
-    <table class="table">
-      <thead>
-        <tr>
-          <th>Tarea</th>
-          <th>Fecha de Entrega</th>
-          <th>Calificación</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let entrega of history">
-          <td>{{ entrega.tarea?.titulo }}</td>
-          <td>{{ entrega.fecha_entrega | date:'dd/MM/yyyy h:mm a' }}</td>
-          <td>{{ entrega.calificacion }}/10</td> <!-- Asumo una nota sobre 10 -->
-        </tr>
-        <tr *ngIf="history.length === 0">
-          <td colspan="3">Aún no tienes calificaciones para mostrar.</td>
-        </tr>
-      </tbody>
-    </table>
+  <div *ngIf="error" class="error-state">
+    <p>{{ error }}</p>
   </div>
 
-  <ng-template #loading>
-    <p>Cargando historial...</p>
+  <div *ngIf="history$ | async as history; else loadingOrEmpty">
+    <div *ngIf="history.length > 0; else emptyState">
+      <div *ngFor="let entrega of history" class="card submission-card">
+        <div class="card-header">
+          <h4>{{ entrega.tarea?.titulo || 'Tarea no especificada' }}</h4>
+        </div>
+        <div class="card-body">
+          <div class="submission-details">
+            <p>
+              <strong>Entregado:</strong>
+              <span>{{ entrega.fecha_entrega | date:'dd/MM/yyyy h:mm a' }}</span>
+              <span *ngIf="entrega.is_late" class="badge badge-tardia">Tardía</span>
+              <span *ngIf="!entrega.is_late" class="badge badge-a-tiempo">A tiempo</span>
+            </p>
+            <p *ngIf="entrega.comentario_estudiante">
+              <strong>Tu Comentario:</strong> {{ entrega.comentario_estudiante }}
+            </p>
+            <p *ngIf="entrega.archivo_path">
+              <strong>Archivo Enviado:</strong>
+              <a [href]="'http://localhost:8000/storage/' + entrega.archivo_path" target="_blank" class="file-link">
+                Descargar Archivo
+              </a>
+            </p>
+          </div>
+
+          <hr>
+
+          <div class="feedback-section">
+            <h5>Feedback del Tutor</h5>
+            <p>
+              <strong>Calificación:</strong>
+              <span class="grade-badge" [ngClass]="{'grade-pending': !entrega.calificacion}">
+                {{ entrega.calificacion || 'Pendiente' }}
+              </span>
+            </p>
+            <p *ngIf="entrega.comentario_tutor">
+              <strong>Comentario del Tutor:</strong> {{ entrega.comentario_tutor }}
+            </p>
+            <p *ngIf="!entrega.comentario_tutor" class="no-feedback">
+              Aún no hay comentarios del tutor.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <ng-template #loadingOrEmpty>
+    <div class="loading-state">
+      <p>Cargando historial...</p>
+    </div>
+  </ng-template>
+  
+  <ng-template #emptyState>
+    <div class="empty-state-container">
+      <p>No tienes entregas en tu historial todavía.</p>
+    </div>
   </ng-template>
 </div>

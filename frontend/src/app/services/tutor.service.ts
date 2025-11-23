@@ -11,7 +11,7 @@ import { Entrega } from '../models/entrega.model';
   providedIn: 'root'
 })
 export class TutorService {
-  private apiUrl = '/api'; 
+  private apiUrl = 'http://localhost:8000/api'; 
 
   constructor(private http: HttpClient) { }
 

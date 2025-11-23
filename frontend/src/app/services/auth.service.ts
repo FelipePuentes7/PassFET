@@ -28,11 +28,24 @@ export class AuthService {
   }
 
   logout(): Observable<any> {
+    // Clear local storage on logout
+    localStorage.removeItem('isAuthenticated');
+    localStorage.removeItem('user');
+    localStorage.removeItem('user_role');
     return this.http.post(`${this.backendUrl}/logout`, {}, { withCredentials: true });
   }
 
   isAuthenticated(): boolean {
     return localStorage.getItem('isAuthenticated') === 'true';
+  }
+  
+  getUserId(): number | null {
+    const userStr = localStorage.getItem('user');
+    if (userStr) {
+      const user = JSON.parse(userStr);
+      return user.id;
+    }
+    return null;
   }
 
   verifyRecovery(data: any): Observable<any> {
